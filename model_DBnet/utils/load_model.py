@@ -1,3 +1,4 @@
+import torch
 class Pytorch_model:
     def __init__(self, model_path, gpu_id=None):
         '''
@@ -6,13 +7,8 @@ class Pytorch_model:
         :param gpu_id: 在哪一块gpu上运行
         '''
         self.gpu_id = 0
-
-        if self.gpu_id is not None and isinstance(self.gpu_id, int) and torch.cuda.is_available():
-            self.device = torch.device("cuda:%s" % self.gpu_id)
-            checkpoint = torch.load(model_path)
-        else:
-            self.device = torch.device("cpu")
-            checkpoint = torch.load(model_path, map_location='cpu')
+        self.device=torch.device("cuda:0")
+        checkpoint = torch.load(model_path)
         print('device:', self.device)
 
         config = checkpoint['config']
