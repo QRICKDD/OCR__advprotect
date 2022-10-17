@@ -1,11 +1,25 @@
-from model_DBnet.utils.utils import draw_bbox
-from model_DBnet.utils.load_model import *
-from AllConfig import GConfig
-import os
+from Tools.DBTools import *
 
 
 if __name__ == '__main__':
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-    DBnet_path=GConfig.DBnet_model_path
-    img_path=GConfig.test_img_path
+    from Tools.Imagebasetool import *
+    from AllConfig.GConfig import test_img_path
+    #加载模型
+    DBnet=load_DBmodel()
+    #加载图片
+    img_path=test_img_path
+    img=img_read(img_path)
+    img = img.unsqueeze_(0)
+    img=img.cuda()
+    preds = DBnet(img)[0]
 
+
+
+    #保存结果到cv图片
+    img = cv2.imread(img_path)
+    # 根据结果计算图
+    h,w=img.shape[:-1]
+    dilates, boxes = get_DB_dilateds_boxes(preds,h,w, min_area=100)
+    cv2.imwrite(r"..\result_save\test_save\orgin.jpg",img)
+    DB_draw_dilated(img,dilateds=dilates,save_path=r"..\result_save\test_save\dilated.jpg")
+    DB_draw_box(img,boxes=boxes,save_path=r"..\result_save\test_save\boxes.jpg")

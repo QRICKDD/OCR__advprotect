@@ -1,4 +1,12 @@
 import torch
+from model_DBnet.models.model import Model as FPNModel
+from torchvision import transforms
+import os
+import cv2
+import time
+import numpy as np
+import pyclipper
+
 class Pytorch_model:
     def __init__(self, model_path, gpu_id=None):
         '''
@@ -13,7 +21,17 @@ class Pytorch_model:
 
         config = checkpoint['config']
         config['arch']['args']['pretrained'] = False
-        self.net = get_model(config)
+
+        newconfig={"arch": {
+            "type": "DBModel",
+            "args": {
+                "backbone": "shufflenetv2",
+                "fpem_repeat": 2,
+                "pretrained": False,
+                "segmentation_head": "FPN"
+            }
+        }}
+        self.net = FPNModel(newconfig)
 
         self.img_channel = config['data_loader']['args']['dataset']['img_channel']
         self.net.load_state_dict(checkpoint['state_dict'])  ## load weights

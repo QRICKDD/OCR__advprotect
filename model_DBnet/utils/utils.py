@@ -1,4 +1,6 @@
 import cv2
+import numpy as np
+import matplotlib.pyplot as plt
 def draw_bbox(img_path, result, color=(128, 240, 128), thickness=3):
     if isinstance(img_path, str):
         img_path = cv2.imread(img_path)
