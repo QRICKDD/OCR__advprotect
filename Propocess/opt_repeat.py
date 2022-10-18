@@ -9,7 +9,7 @@ def repeat_4D(patch:torch.Tensor,h_num:int,w_num:int,h_real,w_real)->torch.Tenso
     :param w_real:
     :return:
     """
-    patch.requires_grad=True
+    assert patch.requires_grad==True
     patch=patch.repeat(1,1,h_num,w_num)
     patch=patch[:,:,:h_real,:w_real]
     return patch

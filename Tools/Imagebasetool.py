@@ -1,8 +1,10 @@
 import cv2
 from torchvision import transforms
-import matplotlib.pyplot as plt
+
 import torch
 from AllConfig.GConfig import test_img_path
+
+import matplotlib.pyplot as plt
 def img_show3(img):
     plt.matshow(img)
     plt.show()
