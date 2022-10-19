@@ -78,7 +78,7 @@ class Repeat_Attack():
             temp_patch = patchc.clone().detach().cpu() + alpha * grad.sign().cpu()
             #并不对图像进行最大最小值的剪裁 仅仅对扰动大小进行修建
             #temp_advimg = torch.clamp(repeat_4D(temp_patch)+img,min=0,max=1)
-            temp_patch = torch.clamp(temp_patch,min=-eps,max=eps)
+            temp_patch = torch.clamp(temp_patch,min=-eps,max=0)
 
             #更新外部扰动
             adv_patch=temp_patch
@@ -86,12 +86,13 @@ class Repeat_Attack():
             #保存中间结果
             if i!=0 and i%50==0:
                 temp_adv_patch=adv_patch.detach().clone().cpu()
-                adv_patch_cv2=img_tensortocv2(temp_adv_patch)
-                cv2.imwrite("../result_save/adv_patch_{}.jpg".format(i),adv_patch_cv2)
                 #计算扰动图像并修剪  保存
                 temp_adv_img=repeat_4D(temp_adv_patch, h_num=int(h / patch_size[2]) + 1,
                           w_num=int(w / patch_size[3]) + 1, h_real=h, w_real=w)*background_mask + img
-                temp_adv_img=torch.clamp(temp_adv_img,min=0,max=1)
+                #保存adv patch 但是记得要用负数保存
+                adv_patch_cv2 = img_tensortocv2(temp_adv_patch+1)
+                cv2.imwrite("../result_save/adv_patch_{}.jpg".format(i), adv_patch_cv2)
+
                 adv_image_cv2=img_tensortocv2(temp_adv_img)
                 cv2.imwrite("../result_save/adv_img_{}.jpg".format(i), adv_image_cv2)
 
@@ -103,4 +104,4 @@ class Repeat_Attack():
 
 if __name__ == '__main__':
     RAT=Repeat_Attack(train_set=None,savedir=None)
-    RAT.attack_single(step=301,patch_size=(1,3,100,100),decay=0,alpha=1/255,eps=200/255)
+    RAT.attack_single(step=101,patch_size=(1,3,100,100),decay=1,alpha=1/255,eps=200/255)
