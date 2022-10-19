@@ -40,13 +40,19 @@ def img_grad_show(img:torch.Tensor)->None:
         except:
             break
 
+def img_extract_background(img_tensor:torch.Tensor):
+    assert (len(img_tensor.shape) == 4 and img_tensor.shape[0] == 1)
+    img_sum=torch.sum(img_tensor,dim=1)
+    mask=(img_sum==3)
+    mask=mask+0
+    return mask.unsqueeze_(0)
+
 def test_cv_tensor(img_path=test_img_path):
     img_cv2=cv2.imread(img_path,1)
     img_tensor=img_read(img_path)
     img_tensor2cv=img_tensortocv2(torch.unsqueeze(img_tensor,dim=0))
     assert (img_tensor2cv==img_cv2).all()
     print('')
-
 
 
 if __name__=='__main__':
