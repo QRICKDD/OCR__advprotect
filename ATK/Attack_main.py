@@ -9,7 +9,7 @@ import tqdm
 from model_DBnet.pred_single import *
 from Tools.Imagebasetool import *
 from AllConfig.GConfig import test_img_path
-from Propocess.opt_repeat import repeat_4D
+from Tools.ImageProcess import repeat_4D
 
 
 class Repeat_Attack():
@@ -101,6 +101,8 @@ class Repeat_Attack():
                 DB_draw_dilated(adv_image_cv2, dilateds=dilates, save_path=r"..\result_save\test_save\dilated_{}.jpg".format(i))
                 DB_draw_box(adv_image_cv2, boxes=boxes, save_path=r"..\result_save\test_save\boxes_{}.jpg".format(i))
 
+    def attack_multi(self):
+        pass
 
 if __name__ == '__main__':
     RAT=Repeat_Attack(train_set=None,savedir=None)
