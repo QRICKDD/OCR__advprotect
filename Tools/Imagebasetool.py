@@ -23,6 +23,7 @@ def img_read(image_path) -> torch.Tensor:
     im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
     # img_show3(im)
     img = transform(im)
+    img = img.unsqueeze_(0)
     return img
 
 
