@@ -6,8 +6,7 @@ import torch
 import torch.nn as nn
 import tqdm
 from model_DBnet.pred_single import *
-from Tools.Imagebasetool import img_read
-from AllConfig.GConfig import test_img_path
+from Tools.Imagebasetool import img_read,img_extract_background,img_tensortocv2
 from Tools.ImageProcess import *
 import random
 
@@ -131,7 +130,7 @@ class RepeatAdvPatch_Attack():
             # 每个epoch都初始化动量
             momentum = 0
             # 每次epoch都打乱样本库
-            epoch_images = random.shuffle(self.train_images)  # this epoch
+            random.shuffle(self.train_images)  # this epoch
             batchs = int(len(self.train_dataset) / self.batch_size)
 
             # 初始化扰动
@@ -139,7 +138,7 @@ class RepeatAdvPatch_Attack():
             adv_patch.requires_grad = True
             for i in range(batchs):
                 # 拿到batchsize数据并存放到cuda
-                batchs_images = epoch_images[i * self.batch_size:i + 1 * self.batch_size]
+                batchs_images = self.train_images[i * self.batch_size : i + 1 * self.batch_size]
                 batchs_images = self.list_to_cuda(batchs_images)
                 hw_list = self.get_image_hw(batchs_images)
                 masks_list = self.get_image_backgroud_mask(batchs_images)  # 提取背景
@@ -147,8 +146,7 @@ class RepeatAdvPatch_Attack():
                 adv_images = self.get_merge_image(adv_patch, mask_list=masks_list,
                                                   image_list=batchs_images, hw_list=hw_list)
                 # 数据扩增
-                aug_images = []
-
+                aug_images= self.get_augm_image(adv_images)
                 # 输入模型预测结果
                 db_results = self.get_DB_results(aug_images)
                 # 计算并打印db损失
@@ -172,7 +170,10 @@ class RepeatAdvPatch_Attack():
             # 保存epoch结果
             if epoch != 0 and epoch % 20 == 0:
                 self.evauate_db_test_path(epoch)
-                self.save_adv_patch_img(self.adv_patch,os.path.join(self.savedir,"advpatch","advpatch_{}.jpg".format(epoch)))
+                temp_save_path=os.path.join(self.savedir,"advpatch")
+                if os.path.exists(temp_save_path):
+                    os.makedirs(temp_save_path)
+                self.save_adv_patch_img(self.adv_patch,os.path.join(temp_save_path,"advpatch_{}.jpg".format(epoch)))
 
 
     def evaulae_db_draw(self,adv_images,path,epoch):
@@ -200,6 +201,12 @@ class RepeatAdvPatch_Attack():
         save_dir = os.path.join(self.savedir, "eval", "orgin")
         save_resize_dir = os.path.join(self.savedir, "eval", "resize")
         save_jpeg_dir = os.path.join(self.savedir, "eval", "jepg")
+        if os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        if os.path.exists(save_jpeg_dir):
+            os.makedirs(save_jpeg_dir)
+        if os.path.exists(save_resize_dir):
+            os.makedirs(save_resize_dir)
         hw_s = self.get_image_hw(self.test_images)
         mask_s = self.get_image_backgroud_mask(self.test_images)
         adv_images = self.get_merge_image(self.adv_patch.clone().detach().cpu(),
@@ -217,7 +224,8 @@ class RepeatAdvPatch_Attack():
 
 
 if __name__ == '__main__':
-    RAT = RepeatAdvPatch_Attack(train_path='',test_path='',savedir='../result_save/100_100',
+    RAT = RepeatAdvPatch_Attack(train_path=r'F:\OCR-TASK\Wsf\data\train',test_path=r'F:\OCR-TASK\Wsf\data\test',
+                                savedir='../result_save/100_100',
                                 eps=100/255,alpha=1/255,decay=0.5,
                                 epoches=101,batch_size=8,
                                 adv_patch_size=(1,3,100,100))
