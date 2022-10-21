@@ -2,11 +2,38 @@ import torch
 import random
 from torchvision import transforms
 from Tools.Imagebasetool import img_grad_show
+from Propocess.DIFFJPEG import compression, decompression
+from Propocess.DIFFJPEG.utils import diff_round, quality_to_factor
+import torch.nn as nn
 
+class DiffJPEG(nn.Module):
+    def __init__(self, height=230, width=224, differentiable=True, quality=80):
+        # Initialize the DiffJPEG layer
+        # Inputs:
+        #     height(int): Original image height
+        #     width(int): Original image width
+        #     differentiable(bool): If true uses custom differentiable
+        #         rounding function, if false uses standard torch.round
+        #     quality(float): Quality factor for jpeg compression scheme.
+        #
+        super(DiffJPEG, self).__init__()
+        print(height,width)
+        if differentiable:
+            rounding = diff_round
+        else:
+            rounding = torch.round
+        factor = quality_to_factor(quality)
+        self.compress = compression.compress_jpeg(rounding=rounding, factor=factor)
+        self.decompress = decompression.decompress_jpeg(height, width, rounding=rounding, factor=factor)
+
+    def forward(self, x):
+        y, cb, cr = self.compress(x)
+        recovered = self.decompress(y, cb, cr)
+        return recovered
 
 def random_image_resize(image: torch.Tensor, low=0.25, high=3):
     assert (len(image.shape) == 4 and image.shape[0] == 1)
-    assert image.requires_grad == True
+    #assert image.requires_grad == True
     scale = random.random()
     shape = image.shape
     h, w = shape[-2], shape[-1]
@@ -24,30 +51,54 @@ def repeat_4D(patch: torch.Tensor, h_num: int, w_num: int, h_real, w_real) -> to
     :return:
     """
     assert (len(patch.shape) == 4 and patch.shape[0] == 1)
-    assert patch.requires_grad == True
+    #assert patch.requires_grad == True
     patch = patch.repeat(1, 1, h_num, w_num)
     patch = patch[:, :, :h_real, :w_real]
     return patch
 
 def random_offset_h(image: torch.Tensor, scale_range=0.1):
     assert (len(image.shape) == 4 and image.shape[0] == 1)
-    assert image.requires_grad == True
+    #assert image.requires_grad == True
     scale = random.random()
     hoffset=int(image.shape[2]*scale_range*scale)+1
     new_image=torch.concat([image[:, :, hoffset:, :], image[:, :, :hoffset, :]], dim=2)
     assert new_image.shape==image.shape
-    return new_image, hoffset
+    return new_image
 
 def random_offset_w(image: torch.Tensor, scale_range=0.1):
     assert (len(image.shape) == 4 and image.shape[0] == 1)
-    assert image.requires_grad == True
+    #assert image.requires_grad == True
     scale = random.random()
     woffset=int(image.shape[3]*scale_range*scale)+1
     new_image = torch.concat([image[:, :, :, woffset:], image[:, :, :, :woffset]], dim=3)
     assert new_image.shape==image.shape
-    return new_image, woffset
+    return new_image
 
 
+def random_jpeg(image:torch.Tensor):
+    assert (len(image.shape) == 4 and image.shape[0] == 1)
+    #assert image.requires_grad == True
+    qs=[75,80,85,90]
+    q=random.choice(qs)
+    h,w=image.shape[2:]
+    h_resize=(h//112)*112
+    w_resize = (w // 112) * 112
+    image = transforms.Resize([h_resize, w_resize])(image)
+    jpeg = DiffJPEG(h_resize, w_resize, differentiable=True, quality=q).cuda()
+    image=jpeg(image)
+    return image
+
+
+def test_random_jpeg():
+    from AllConfig.GConfig import test_img_path
+    from Tools.Imagebasetool import img_read,img_grad_show,img_tensortocv2,img_show3
+    img=img_read(test_img_path)
+    img=img.cuda()
+    img.requires_grad=True
+    img=random_jpeg(img)
+    imcv=img_tensortocv2(img)
+    img_show3(imcv)
+    img_grad_show(img)
 
 
 def test_repeat_4D():

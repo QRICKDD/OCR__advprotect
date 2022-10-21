@@ -29,7 +29,7 @@ def img_read(image_path) -> torch.Tensor:
 
 def img_tensortocv2(img_tensor: torch.Tensor):
     assert (len(img_tensor.shape) == 4 and img_tensor.shape[0] == 1)
-    img_tensor = img_tensor.detach().cpu()
+    img_tensor = img_tensor.clone().detach().cpu()
     img_tensor = img_tensor.squeeze()
     img_tensor = img_tensor.mul_(255).clamp_(0, 255).permute(1, 2, 0).type(torch.uint8).numpy()
     img_cv = cv2.cvtColor(img_tensor, cv2.COLOR_RGB2BGR)

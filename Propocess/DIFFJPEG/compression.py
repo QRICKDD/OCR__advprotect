@@ -5,7 +5,9 @@ import numpy as np
 import torch
 import torch.nn as nn
 # Local
-import Propocess.DIFFJPEG.utils as utils
+import sys
+
+from Propocess.DIFFJPEG import utils
 
 
 class rgb_to_ycbcr_jpeg(nn.Module):

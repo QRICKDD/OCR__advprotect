@@ -8,176 +8,217 @@ import tqdm
 from model_DBnet.pred_single import *
 from Tools.Imagebasetool import img_read
 from AllConfig.GConfig import test_img_path
-from Tools.ImageProcess import repeat_4D,random_image_resize,random_offset_h,random_offset_w
+from Tools.ImageProcess import *
 import random
+
 
 class RepeatAdvPatch_Attack():
     def __init__(self,
-                 train_path, savedir,
-                 eps=100/255, alpha=1/255,decay=1.0,
-                 epoches=100, batch_size=8,
-                 adv_patch_size=(1,3,100,100),
-                 is_test=True,):
+                 train_path, test_path, savedir,
+                 eps=100 / 255, alpha=1 / 255, decay=1.0,
+                 epoches=101, batch_size=8,
+                 adv_patch_size=(1, 3, 100, 100),
+                 is_test=True, ):
         self.DBmodel = load_DBmodel()
         # hyper-parameters
         self.eps = eps
         self.alpha = alpha
         self.decay = decay
 
-        #train settings
+        # train settings
         self.epoches = epoches
-        self.batch_size=batch_size
+        self.batch_size = batch_size
         self.loss = nn.MSELoss()
 
         # path process
         self.savedir = savedir
         if os.path.exists(self.savedir) == False:
             os.makedirs(self.savedir)
-        self.train_dataset=[os.path.join(train_path,name) for name in os.listdir(train_path)]
+        self.train_dataset = [os.path.join(train_path, name) for name in os.listdir(train_path)]
+        self.test_dataset = [os.path.join(test_path, name) for name in os.listdir(test_path)]
+
         if is_test:
-            self.train_dataset=self.train_dataset[:batch_size*2]
-        self.train_images=[img_read(path) for path in self.train_dataset]#[(1,3,h,w),...]
+            self.train_dataset = self.train_dataset[:batch_size * 2]
+        self.train_images = [img_read(path) for path in self.train_dataset]  # [(1,3,h,w),...]
+        self.test_images = [img_read(path) for path in self.test_dataset]
 
-        #initiation
-        self.adv_patch=torch.zeros(list(adv_patch_size))
+        # initiation
+        self.adv_patch = torch.zeros(list(adv_patch_size))
 
-    def get_image_hw(self,image_list):
-        hw_list=[]
+    def get_image_hw(self, image_list):
+        hw_list = []
         for item in image_list:
             hw_list.append(item.shape[2:])
         return hw_list
 
-    def get_image_backgroud_mask(self,image_list):
-        mask_list=[]
+    def get_image_backgroud_mask(self, image_list):
+        mask_list = []
         for item in image_list:
             mask_list.append(img_extract_background(item))
         return mask_list
 
-    def list_to_cuda(self,data):
-        data_cuda=[]
+    def list_to_cuda(self, data):
+        data_cuda = []
         for item in data:
             data_cuda.append(item.cuda())
         return data_cuda
 
-    def get_merge_image(self,patch:torch.Tensor,mask_list:list,image_list:list,hw_list:list):
-        assert patch.requires_grad==True
-        patch_h,patch_w=patch.shape[2:]
-        adv_image_list=[]
-        for mask,image,[h,w] in zip(mask_list,image_list,hw_list):
-            repeat_patch=repeat_4D(patch=patch,h_num=int(h/patch_h)+1,w_num=int(w/patch_w)+1,
-                                   h_real=h,w_real=w)
-            adv_image_list.append(image+repeat_patch*mask.cuda())
+    def get_merge_image(self, patch: torch.Tensor, mask_list: list,
+                        image_list: list, hw_list: list):
+        assert patch.requires_grad == True
+        patch_h, patch_w = patch.shape[2:]
+        adv_image_list = []
+        for mask, image, [h, w] in zip(mask_list, image_list, hw_list):
+            repeat_patch = repeat_4D(patch=patch, h_num=int(h / patch_h) + 1, w_num=int(w / patch_w) + 1,
+                                     h_real=h, w_real=w)
+            adv_image_list.append(image + repeat_patch * mask.cuda())
         return adv_image_list
 
-    def get_augm_image(self,adv_images):
-        pass
+    def get_augm_image(self, adv_images):
+        resize_images = self.get_random_resize_image(adv_images)
+        jpeg_images = self.get_random_jpeg_image(adv_images)
+        offset_h_images = self.get_random_offset_h(adv_images)
+        offset_w_images = self.get_random_offset_w(adv_images)
+        return adv_images + resize_images + jpeg_images + offset_h_images + offset_w_images
 
-    def get_DB_results(self,aug_images):
+    def get_random_resize_image(self, adv_image_lists, low=0.4, high=3.0):
+        resize_adv_img_lists = []
+        for img in adv_image_lists:
+            resize_adv_img_lists.append(random_image_resize(img, low, high))
+        return resize_adv_img_lists
 
-    def attack_(self):
+    def get_random_jpeg_image(self, adv_image_lists):
+        jpeg_adv_img_lists = []
+        for img in adv_image_lists:
+            jpeg_adv_img_lists.append(random_jpeg(img))
+        return jpeg_adv_img_lists
+
+    def get_random_offset_h(self, adv_image_lists, scale_range=0.1):
+        offset_h_adv_img_lists = []
+        for img in adv_image_lists:
+            offset_h_adv_img_lists.append(random_offset_h(img, scale_range=scale_range))
+        return offset_h_adv_img_lists
+
+    def get_random_offset_w(self, adv_image_lists, scale_range=0.1):
+        offset_w_adv_img_lists = []
+        for img in adv_image_lists:
+            offset_w_adv_img_lists.append(random_offset_w(img, scale_range=scale_range))
+        return offset_w_adv_img_lists
+
+    def get_DB_results(self, aug_images):
+        db_results = []
+        for img in aug_images:
+            preds = self.DBmodel(img)[0]
+            prob_map = preds[0]
+            db_results.append(prob_map)
+        return db_results
+
+
+
+
+    def get_DB_mean_loss(self, resultes):
+        cost = torch.Tensor([0])
+        for res in resultes:
+            target_prob_map = torch.zeros_like(res)
+            cost += -self.loss(res, target_prob_map.cuda())
+        cost = cost / len(resultes)
+        return cost
+
+    def train(self):
+        print("start training-====================")
         for epoch in range(self.epoches):
+            print("epoch: ",epoch)
+            # 每个epoch都初始化动量
+            momentum = 0
             # 每次epoch都打乱样本库
-            epoch_images=random.shuffle(self.train_images)# this epoch
-            batchs= int(len(self.train_dataset)/self.batch_size)
+            epoch_images = random.shuffle(self.train_images)  # this epoch
+            batchs = int(len(self.train_dataset) / self.batch_size)
 
-            #初始化扰动
-            adv_patch=self.adv_patch.clone().detach().cuda()
-            adv_patch.requires_grad=True
+            # 初始化扰动
+            adv_patch = self.adv_patch.clone().detach().cuda()
+            adv_patch.requires_grad = True
             for i in range(batchs):
-                #拿到batchsize数据并存放到cuda
-                batchs_images=epoch_images[i*self.batch_size:i+1*self.batch_size]
-                batchs_images=self.list_to_cuda(batchs_images)
+                # 拿到batchsize数据并存放到cuda
+                batchs_images = epoch_images[i * self.batch_size:i + 1 * self.batch_size]
+                batchs_images = self.list_to_cuda(batchs_images)
                 hw_list = self.get_image_hw(batchs_images)
-                masks_list = self.get_image_backgroud_mask(batchs_images)#提取背景
-                #嵌入扰动
-                adv_images = self.get_merge_image(adv_patch,mask_list=masks_list,
-                                                  image_list=batchs_images,hw_list=hw_list)
-                #数据扩增
+                masks_list = self.get_image_backgroud_mask(batchs_images)  # 提取背景
+                # 嵌入扰动
+                adv_images = self.get_merge_image(adv_patch, mask_list=masks_list,
+                                                  image_list=batchs_images, hw_list=hw_list)
+                # 数据扩增
                 aug_images = []
 
+                # 输入模型预测结果
+                db_results = self.get_DB_results(aug_images)
+                # 计算并打印db损失
+                db_mean_loss = self.get_DB_mean_loss(db_results)
+                print("epoch:{}, db_mean_loss:{}".format(epoch, db_mean_loss))
+
+                # 计算梯度 更新 动量
+                grad = torch.autograd.grad(db_mean_loss, adv_patch,
+                                           retain_graph=False, create_graph=False)[0]
+                grad = grad / torch.mean(torch.abs(grad), dim=(1), keepdim=True)  # 有待考证
+                grad = grad + momentum * self.decay
+                momentum = grad
+
+                # 更新adv_patch
+                temp_patch = adv_patch.clone().detach().cpu() + self.alpha * grad.sign().cpu()
+                temp_patch = torch.clamp(temp_patch, min=-self.eps, max=0)
+                adv_patch = temp_patch
+
+            # epoch结束 更新self.adv_patch
+            self.adv_patch = adv_patch
+            # 保存epoch结果
+            if epoch != 0 and epoch % 20 == 0:
+                self.evauate_db_test_path(epoch)
+                self.save_adv_patch_img(self.adv_patch,os.path.join(self.savedir,"advpatch","advpatch_{}.jpg".format(epoch)))
+
+
+    def evaulae_db_draw(self,adv_images,path,epoch):
+        adv_images_cuda = self.list_to_cuda(adv_images)
+        db_results = []
+        for img in adv_images_cuda:
+            preds = self.DBmodel(img)[0]
+            db_results.append(preds)
+        hw_lists=self.get_image_hw(adv_images)
+        i=0
+        save_name="DB_{}_{}.jpg"
+        for adv_image,pred,[h,w] in zip(adv_images,db_results,hw_lists):
+            _,boxes=get_DB_dilateds_boxes(pred,h,w)
+            adv_image_cv2=img_tensortocv2(adv_image)
+            DB_draw_box(adv_image_cv2,boxes=boxes,save_path=os.path.join(path,save_name.format(epoch,i)))
+            i+=1
+        return db_results
+
+    def save_adv_patch_img(self,img_tensor,path):
+        img_cv=img_tensortocv2(img_tensor)
+        cv2.imwrite(path,img_cv)
+
+
+    def evauate_db_test_path(self, epoch):
+        save_dir = os.path.join(self.savedir, "eval", "orgin")
+        save_resize_dir = os.path.join(self.savedir, "eval", "resize")
+        save_jpeg_dir = os.path.join(self.savedir, "eval", "jepg")
+        hw_s = self.get_image_hw(self.test_images)
+        mask_s = self.get_image_backgroud_mask(self.test_images)
+        adv_images = self.get_merge_image(self.adv_patch.clone().detach().cpu(),
+                                          mask_s, self.test_images, hw_s)
+        self.evaulae_db_draw(adv_images=adv_images,path=save_dir,epoch=epoch)
+        resize_adv_images=self.get_random_resize_image(adv_image_lists=adv_images,low=0.4,high=3)
+        self.evaulae_db_draw(adv_images=resize_adv_images, path=save_resize_dir, epoch=epoch)
+        jpeg_adv_image=self.get_random_jpeg_image(adv_image_lists=adv_images)
+        self.evaulae_db_draw(adv_images=jpeg_adv_image, path=save_jpeg_dir, epoch=epoch)
 
 
 
 
 
 
-
-    def attack_single(self, step=100, patch_size=(1,3,60,60), decay=1,alpha=1/255,eps=50/255):
-        #加载原图
-        img=img_read(test_img_path)
-        img = torch.unsqueeze(img, dim=0)
-        h,w=img.shape[2:]
-        #提取背景mask
-        background_mask=img_extract_background(img)
-        cv2.imwrite("../result_save/mask.jpg",img_tensortocv2(torch.cat([background_mask,background_mask,background_mask],dim=1)))
-        #初始化patch
-        adv_patch=torch.zeros(list(patch_size))
-        #初始化动量
-        momentum=torch.zeros_like(adv_patch).detach().cuda()
-
-        #初始化损失
-        loss = nn.MSELoss()
-
-
-        for i in range(step):
-            #克隆中间变量   生成advimg
-            imc = img.clone().detach().cuda()
-            patchc=adv_patch.clone().detach().cuda()
-            patchc.requires_grad=True#可导
-            patch_repeat=repeat_4D(patchc,h_num=int(h/patch_size[2])+1,
-                                   w_num=int(w/patch_size[3])+1,h_real=h,w_real=w)
-
-            advimg=imc+patch_repeat*background_mask.cuda()
-            #非常重要的操作***********
-            advimg=torch.clamp(advimg,min=0,max=1)
-
-            #输入模型计算结果
-            preds=self.DBmodel(advimg)[0]
-            prob_map=preds[0]
-
-            #初始化target_label
-            target_prob_map=torch.zeros_like(prob_map)
-            target_prob_map=target_prob_map.cuda()
-            cost = -loss(prob_map, target_prob_map)
-            print("step:{}, cost：{}".format(i,cost))
-
-            #计算梯度 更新 动量
-            grad = torch.autograd.grad(cost, patchc,
-                                       retain_graph=False, create_graph=False)[0]
-            grad = grad / torch.mean(torch.abs(grad), dim=(1), keepdim=True)
-            grad = grad + momentum * decay
-            momentum = grad
-
-            #更新中间扰动temp_patch 进行裁剪等操作
-            temp_patch = patchc.clone().detach().cpu() + alpha * grad.sign().cpu()
-            #并不对图像进行最大最小值的剪裁 仅仅对扰动大小进行修建
-            #temp_advimg = torch.clamp(repeat_4D(temp_patch)+img,min=0,max=1)
-            temp_patch = torch.clamp(temp_patch,min=-eps,max=0)
-
-            #更新外部扰动
-            adv_patch=temp_patch
-
-            #保存中间结果
-            if i!=0 and i%50==0:
-                temp_adv_patch=adv_patch.detach().clone().cpu()
-                #计算扰动图像并修剪  保存
-                temp_adv_img=repeat_4D(temp_adv_patch, h_num=int(h / patch_size[2]) + 1,
-                          w_num=int(w / patch_size[3]) + 1, h_real=h, w_real=w)*background_mask + img
-                #保存adv patch 但是记得要用负数保存
-                adv_patch_cv2 = img_tensortocv2(temp_adv_patch+1)
-                cv2.imwrite("../result_save/adv_patch_{}.jpg".format(i), adv_patch_cv2)
-
-                adv_image_cv2=img_tensortocv2(temp_adv_img)
-                cv2.imwrite("../result_save/adv_img_{}.jpg".format(i), adv_image_cv2)
-
-                #绘制框
-                dilates, boxes = get_DB_dilateds_boxes(preds, h, w, min_area=100)
-                DB_draw_dilated(adv_image_cv2, dilateds=dilates, save_path=r"..\result_save\test_save\dilated_{}.jpg".format(i))
-                DB_draw_box(adv_image_cv2, boxes=boxes, save_path=r"..\result_save\test_save\boxes_{}.jpg".format(i))
-
-    def attack_multi(self):
-        pass
 
 if __name__ == '__main__':
-    RAT=Repeat_Attack(train_set=None,savedir=None)
-    RAT.attack_single(step=101,patch_size=(1,3,100,100),decay=1,alpha=1/255,eps=200/255)
+    RAT = RepeatAdvPatch_Attack(train_path='',test_path='',savedir='../result_save/100_100',
+                                eps=100/255,alpha=1/255,decay=0.5,
+                                epoches=101,batch_size=8,
+                                adv_patch_size=(1,3,100,100))
+    RAT.train()

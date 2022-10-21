@@ -5,7 +5,9 @@ import numpy as np
 import torch
 import torch.nn as nn
 # Local
-import Propocess.DIFFJPEG.utils as utils
+import sys
+sys.path.append(r"..\Propocess\DIFFJPEG")
+import utils as utils
 
 
 class y_dequantize(nn.Module):
