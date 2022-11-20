@@ -1,5 +1,6 @@
 import cv2
 from torchvision import transforms
+from torch.autograd import Variable
 
 import torch
 from AllConfig.GConfig import test_img_path

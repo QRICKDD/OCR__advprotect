@@ -9,7 +9,6 @@ if __name__ == '__main__':
     #加载图片
     img_path=test_img_path
     img=img_read(img_path)
-    img = img.unsqueeze_(0)
     img=img.cuda()
     preds = DBnet(img)[0]
 
