@@ -6,8 +6,8 @@ import numpy as np
 import pyclipper
 import cv2
 
-def load_DBmodel():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+def load_DBmodel(device):
+    #os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     #加载模型
     DBnet_path=GConfig.DBnet_model_path
     checkpoint = torch.load(DBnet_path)
@@ -19,7 +19,7 @@ def load_DBmodel():
     }
     DBnet = FPNModel(config)
     DBnet.load_state_dict(checkpoint['state_dict'])
-    DBnet=DBnet.cuda()
+    DBnet=DBnet.to(device=device)
     DBnet.eval()
     return DBnet
 

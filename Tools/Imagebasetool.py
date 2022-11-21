@@ -45,7 +45,11 @@ def img_grad_show(img: torch.Tensor) -> None:
     while ygf != ():
         print(ygf)
         try:
-            ygf = ygf.next_functions[0][0]
+            if ygf.next_functions[0][0]==None and len(ygf.next_functions)>1:
+                ygf = ygf.next_functions[1][0]
+            else:
+                ygf = ygf.next_functions[0][0]
+
         except:
             break
 

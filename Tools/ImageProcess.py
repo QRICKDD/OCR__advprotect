@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import random
 from torchvision import transforms
@@ -88,6 +89,39 @@ def random_jpeg(image:torch.Tensor):
     image=jpeg(image)
     return image
 
+def normlize_MeanVariance(image:torch.Tensor):
+    assert (len(image.shape) == 4 and image.shape[0] == 1)
+    mean = torch.Tensor([[[[0.485]],[[0.456]],[[ 0.406]]]])
+    variance = torch.Tensor([[[[0.229]], [[0.224]], [[0.225]]]])
+    image=(image-mean)/variance
+    return image
+
+def resize_aspect_ratio(image:torch.Tensor,device,square_size,mag_ratio=1.5):
+    assert (len(image.shape) == 4 and image.shape[0] == 1)
+    h,w=image.shape[2:]
+    target_size = mag_ratio * max(h, w)
+    if target_size>square_size:
+        target_size=square_size
+    ratio=target_size/max(h,w)
+    target_h,target_w=int(h*ratio),int(w*ratio)
+    image=transforms.Resize([target_h,target_w])(image)
+
+    # make canvas and paste image
+    target_h32, target_w32 = target_h, target_w
+    if target_h % 32 != 0:
+        target_h32 = target_h + (32 - target_h % 32)
+    if target_w % 32 != 0:
+        target_w32 = target_w + (32 - target_w % 32)
+    resized = torch.zeros([1,3,target_h32, target_w32]).to(device)
+    resized[:,:,0:target_h,0:target_w]=image
+
+    #target_h, target_w = target_h32, target_w32
+    #size_heatmap = (int(target_w / 2), int(target_h / 2))
+    #return size_heatmap
+    return resized,ratio
+
+
+
 
 def test_random_jpeg():
     from AllConfig.GConfig import test_img_path
@@ -145,3 +179,15 @@ def test_random_offset_w():
     assert (img==torch.tensor([[[[0.1321, 0.4942],
                                 [0.3320, 0.3797],]]])).all()
     img_grad_show(img)
+
+
+def test_resize_aspect_ratio():
+    from Tools.Imagebasetool import img_grad_show
+    img=torch.randn(1,3,5,5)
+    img.requires_grad=True
+    img=img.cuda()
+    resize_image,ratio=resize_aspect_ratio(image=img,device=torch.device('cuda:0'),
+                                           square_size=10,mag_ratio=1.5)
+    print(resize_image.shape)
+    print(resize_image[0,0,:10,0])
+    img_grad_show(resize_image)

@@ -3,9 +3,9 @@ from Tools.DBTools import *
 
 if __name__ == '__main__':
     from Tools.Imagebasetool import *
-    from AllConfig.GConfig import test_img_path
+    from AllConfig.GConfig import test_img_path,test_device
     #加载模型
-    DBnet=load_DBmodel()
+    DBnet=load_DBmodel(device=test_device)
     #加载图片
     img_path=test_img_path
     img=img_read(img_path)
