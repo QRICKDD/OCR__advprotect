@@ -115,6 +115,8 @@ class RepeatAdvPatch_Attack():
             # 初始化扰动
             adv_patch = self.adv_patch.clone().detach().cuda()
             adv_patch.requires_grad = True
+            # adv_patch2 = self.adv_patch.clone().detach().cuda()
+            # adv_patch2.requires_grad = True
             # epoch_loss
             log_epoch_DB_loss=0
             log_epoch_CRAFT_loss = 0
@@ -124,6 +126,11 @@ class RepeatAdvPatch_Attack():
                 batchs_images = self.list_to_cuda(batchs_images)
                 hw_list = get_image_hw(batchs_images)
                 masks_list = self.get_image_backgroud_mask(batchs_images)  # 提取背景
+
+                """
+                开始batchsize的遍历，手动扩增
+                """
+
                 # 嵌入扰动
                 adv_images = self.get_merge_image(adv_patch, mask_list=masks_list,
                                                   image_list=batchs_images, hw_list=hw_list)
@@ -136,25 +143,30 @@ class RepeatAdvPatch_Attack():
                 # 当前的batch的grad
                 sum_grad = torch.zeros_like(adv_patch)#CPU
                 for a_image in aug_images:
+                    adv_patch.requires_grad = True
                     # 计算db_logit损失
                     db_result = self.get_DB_single_result(a_image)
                     db_single_loss = self.get_DB_single_loss(db_result, device=GConfig.DB_device)
                     log_DB_logits_loss += db_single_loss.clone().detach().cpu().item()
                     grad_db = torch.autograd.grad(db_single_loss, adv_patch,
                                                   retain_graph=False, create_graph=False)[0]
+                    adv_patch.requires_grad=True
                     # 计算craft_logit损失
-                    score_text, score_link, target_ratio = get_CRAFT_pred(self.CRAFTmodel, img=aug_images,
+                    score_text, score_link, target_ratio = get_CRAFT_pred(self.CRAFTmodel, img=a_image,
                                                                           square_size=1280,
-                                                                          device=GConfig.CRAFT_device, is_eval=True)
+                                                                          device=GConfig.CRAFT_device, is_eval=False)
                     craft_single_loss = self.get_CRAFT_single_loss(score_text=score_text, score_link=score_link,
                                                                    device=GConfig.CRAFT_device)
-                    log_CRAFT_logits_loss += craft_single_loss.clone().detach().cpu().item()
                     grad_craft = torch.autograd.grad(craft_single_loss, adv_patch,
                                                      retain_graph=False, create_graph=False)[0]
+                    # grad_tttsum = torch.autograd.grad(craft_single_loss + db_single_loss, adv_patch,
+                    #                                  retain_graph=False, create_graph=False)[0]
+                    # log_CRAFT_logits_loss += craft_single_loss.clone().detach().cpu().item()
+                    # sum_grad+=grad_tttsum
                     sum_grad += grad_db.detach().cpu()
                     sum_grad += grad_craft.detach().cpu()
                 #
-                sum_grad/=+(len(aug_images)*2)
+                sum_grad/=(len(aug_images)*2)
                 # 计算梯度 更新 动量
                 grad = sum_grad / torch.mean(torch.abs(sum_grad), dim=(1), keepdim=True)  # 有待考证
                 grad = grad + momentum * self.decay
@@ -283,7 +295,7 @@ class RepeatAdvPatch_Attack():
 if __name__ == '__main__':
     RAT = RepeatAdvPatch_Attack(train_path=r'F:\OCR-TASK\Wsf\data\train', test_path=r'F:\OCR-TASK\Wsf\data\test',
                                 savedir='../result_save/100_100',
-                                eps=100 / 255, alpha=1 / 255, decay=0.5,
+                                eps=50/ 255, alpha=1 / 255, decay=0.5,
                                 epoches=101, batch_size=2,
                                 adv_patch_size=(1, 3, 100, 100),
                                 is_test=True)
