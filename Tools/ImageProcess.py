@@ -89,10 +89,12 @@ def random_jpeg(image:torch.Tensor):
     image=jpeg(image)
     return image
 
-def normlize_MeanVariance(image:torch.Tensor):
+def normlize_MeanVariance(image:torch.Tensor,device):
     assert (len(image.shape) == 4 and image.shape[0] == 1)
     mean = torch.Tensor([[[[0.485]],[[0.456]],[[ 0.406]]]])
+    mean=mean.to(device)
     variance = torch.Tensor([[[[0.229]], [[0.224]], [[0.225]]]])
+    variance=variance.to(device)
     image=(image-mean)/variance
     return image
 
