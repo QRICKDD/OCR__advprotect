@@ -37,7 +37,8 @@ def get_CRAFT_pred(model,img:torch.Tensor,square_size=1280,
                                                    mag_ratio=1.0)
     img_norm=normlize_MeanVariance(img_resized,device)
     if is_eval:
-        model.eval()
+        with torch.no_grad():
+            y,_=model(img_norm)
     else:
         y,_=model(img_norm)
     score_text = y[0, :, :, 0]
