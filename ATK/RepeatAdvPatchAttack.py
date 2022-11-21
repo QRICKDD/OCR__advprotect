@@ -46,6 +46,11 @@ class RepeatAdvPatch_Attack():
         # initiation
         self.adv_patch = torch.zeros(list(adv_patch_size))
 
+        # transform列表
+        self.functions_name=[None,'get_random_resize_image','get_random_resize_image',
+                        'get_random_jpeg_image',
+                        'get_random_offset_h','get_random_offset_w']
+
     def get_image_backgroud_mask(self, image_list):
         mask_list = []
         for item in image_list:
@@ -58,7 +63,7 @@ class RepeatAdvPatch_Attack():
             data_cuda.append(item.cuda())
         return data_cuda
 
-    def get_merge_image(self, patch: torch.Tensor, mask_list: list,
+    def get_merge_image_list(self, patch: torch.Tensor, mask_list: list,
                         image_list: list, hw_list: list):
         assert patch.requires_grad == True
         patch_h, patch_w = patch.shape[2:]
@@ -68,6 +73,14 @@ class RepeatAdvPatch_Attack():
                                      h_real=h, w_real=w)
             adv_image_list.append(image + repeat_patch * mask.cuda())
         return adv_image_list
+
+    def get_merge_image(self, patch: torch.Tensor, mask,image,hw):
+        assert patch.requires_grad == True
+        patch_h, patch_w = patch.shape[2:]
+        [h,w]=hw
+        repeat_patch = repeat_4D(patch=patch, h_num=int(h / patch_h) + 1, w_num=int(w / patch_w) + 1,
+                                     h_real=h, w_real=w)
+        return image + repeat_patch * mask.cuda()
 
     def get_DB_results(self, aug_images):
         db_results = []
@@ -103,6 +116,61 @@ class RepeatAdvPatch_Attack():
         cost = -0.5 * self.loss(score_link, target_link) - 0.5 * self.loss(score_text, target_text)
         return cost
 
+    def get_DB_grad(self,adv_image,adv_patch):
+        db_result = self.get_DB_single_result(adv_image)
+        db_single_loss = self.get_DB_single_loss(db_result, device=GConfig.DB_device)
+        grad_db = torch.autograd.grad(db_single_loss, adv_patch,
+                                      retain_graph=False, create_graph=False)[0]
+        return db_single_loss.detach().cpu().item(),grad_db.detach().cpu()
+
+    def get_CRAFT_grad(self,adv_image,adv_patch):
+        score_text, score_link, target_ratio = get_CRAFT_pred(self.CRAFTmodel, img=adv_image,
+                                                              square_size=1280,
+                                                              device=GConfig.CRAFT_device, is_eval=False)
+        craft_single_loss = self.get_CRAFT_single_loss(score_text=score_text, score_link=score_link,
+                                                       device=GConfig.CRAFT_device)
+        grad_craft = torch.autograd.grad(craft_single_loss, adv_patch,
+                                         retain_graph=False, create_graph=False)[0]
+        return craft_single_loss.detach().cpu().item(),grad_craft.detach().cpu()
+    #快捷初始化
+    def inner_init_adv_patch_image(self,mask,image,hw):
+        adv_patch = self.adv_patch.clone().detach().cuda()
+        adv_patch.requires_grad = True
+        adv_image = self.get_merge_image(adv_patch, mask=mask,
+                                         image=image, hw=hw)
+        return adv_patch,adv_image
+
+    #循环遍历,提供batch_images,等，返回grad_sum,和loss
+    def inner_batch(self,mask,image,hw):
+        sum_grad = torch.zeros_like(self.adv_patch)
+        fun_DB_loss=0
+        fun_CRAFT_loss = 0
+        for item in self.functions_name:
+            if item==None:
+                adv_patch, adv_image = self.inner_init_adv_patch_image(mask, image, hw)
+                temp_db_loss, temp_db_grad = self.get_DB_grad(adv_image, adv_patch)  # DB
+                fun_DB_loss+=temp_db_loss
+
+                adv_patch, adv_image = self.inner_init_adv_patch_image(mask, image, hw)
+                temp_craft_loss, temp_craft_grad = self.get_CRAFT_grad(adv_image, adv_patch)  # CRAFT
+
+                fun_CRAFT_loss+=temp_craft_loss
+                sum_grad += (temp_db_grad+temp_craft_grad)
+            else:
+                now_fun=eval(item)
+
+                adv_patch, adv_image = self.inner_init_adv_patch_image(mask, image, hw)
+                adv_image=now_fun(adv_image)[0]
+                temp_db_loss, temp_db_grad = self.get_DB_grad(adv_image, adv_patch)  # DB
+                fun_DB_loss += temp_db_loss
+
+                adv_patch, adv_image = self.inner_init_adv_patch_image(mask, image, hw)
+                adv_image = now_fun(adv_image)[0]
+                temp_craft_loss, temp_craft_grad = self.get_CRAFT_grad(adv_image, adv_patch)  # CRAFT
+
+                fun_CRAFT_loss += temp_craft_loss
+                sum_grad += (temp_db_grad + temp_craft_grad)
+        return fun_DB_loss,fun_CRAFT_loss,sum_grad
     def train(self):
         print("start training-====================")
         for epoch in range(self.epoches):
@@ -112,14 +180,11 @@ class RepeatAdvPatch_Attack():
             # 每次epoch都打乱样本库
             random.shuffle(self.train_images)  # this epoch
             batchs = int(len(self.train_dataset) / self.batch_size)
-            # 初始化扰动
-            adv_patch = self.adv_patch.clone().detach().cuda()
-            adv_patch.requires_grad = True
-            # adv_patch2 = self.adv_patch.clone().detach().cuda()
-            # adv_patch2.requires_grad = True
-            # epoch_loss
+
+
             log_epoch_DB_loss=0
             log_epoch_CRAFT_loss = 0
+            #这里遍历一个epoch内的batchs
             for i in range(batchs):
                 # 拿到batchsize数据并存放到cuda
                 batchs_images = self.train_images[i * self.batch_size: i + 1 * self.batch_size]
@@ -127,64 +192,33 @@ class RepeatAdvPatch_Attack():
                 hw_list = get_image_hw(batchs_images)
                 masks_list = self.get_image_backgroud_mask(batchs_images)  # 提取背景
 
-                """
-                开始batchsize的遍历，手动扩增
-                """
+                #这边遍历单个batch
+                sum_grad=torch.zeros_like(self.adv_patch)
+                log_batch_DB_loss=0
+                log_batch_CRAFT_loss = 0
+                for b_index,b_img in enumerate(batchs_images):
+                    fun_DB_loss,fun_CRAFT_loss,temp_sum_grad=self.inner_batch(masks_list[b_index],batchs_images[b_index],
+                                                                        hw=hw_list[b_index])
+                    log_batch_CRAFT_loss+=fun_DB_loss/len(self.functions_name)
+                    log_batch_DB_loss+=fun_CRAFT_loss/len(self.functions_name)
+                    sum_grad+=temp_sum_grad/len(self.functions_name)
 
-                # 嵌入扰动
-                adv_images = self.get_merge_image(adv_patch, mask_list=masks_list,
-                                                  image_list=batchs_images, hw_list=hw_list)
-                # 数据扩增
-                aug_images = get_augm_image(adv_images)
-
-                # 遍历，扩增数据分别分别输入到两个模型中
-                log_DB_logits_loss = 0
-                log_CRAFT_logits_loss = 0
-                # 当前的batch的grad
-                sum_grad = torch.zeros_like(adv_patch)#CPU
-                for a_image in aug_images:
-                    adv_patch.requires_grad = True
-                    # 计算db_logit损失
-                    db_result = self.get_DB_single_result(a_image)
-                    db_single_loss = self.get_DB_single_loss(db_result, device=GConfig.DB_device)
-                    log_DB_logits_loss += db_single_loss.clone().detach().cpu().item()
-                    grad_db = torch.autograd.grad(db_single_loss, adv_patch,
-                                                  retain_graph=False, create_graph=False)[0]
-                    adv_patch.requires_grad=True
-                    # 计算craft_logit损失
-                    score_text, score_link, target_ratio = get_CRAFT_pred(self.CRAFTmodel, img=a_image,
-                                                                          square_size=1280,
-                                                                          device=GConfig.CRAFT_device, is_eval=False)
-                    craft_single_loss = self.get_CRAFT_single_loss(score_text=score_text, score_link=score_link,
-                                                                   device=GConfig.CRAFT_device)
-                    grad_craft = torch.autograd.grad(craft_single_loss, adv_patch,
-                                                     retain_graph=False, create_graph=False)[0]
-                    # grad_tttsum = torch.autograd.grad(craft_single_loss + db_single_loss, adv_patch,
-                    #                                  retain_graph=False, create_graph=False)[0]
-                    # log_CRAFT_logits_loss += craft_single_loss.clone().detach().cpu().item()
-                    # sum_grad+=grad_tttsum
-                    sum_grad += grad_db.detach().cpu()
-                    sum_grad += grad_craft.detach().cpu()
-                #
-                sum_grad/=(len(aug_images)*2)
+                #加到epoch的loss里面
+                log_epoch_DB_loss+=log_batch_DB_loss
+                log_epoch_CRAFT_loss += log_batch_CRAFT_loss
                 # 计算梯度 更新 动量
                 grad = sum_grad / torch.mean(torch.abs(sum_grad), dim=(1), keepdim=True)  # 有待考证
                 grad = grad + momentum * self.decay
                 momentum = grad
 
-                # 更新adv_patch
-                temp_patch = adv_patch.clone().detach().cpu() + self.alpha * grad.sign()
+                # 单个batch结束 更新adv_patch
+                temp_patch = self.adv_patch.clone().detach().cpu() + self.alpha * grad.sign()
                 temp_patch = torch.clamp(temp_patch, min=-self.eps, max=0)
-                adv_patch = temp_patch
-                print("batch_loss===db_mean_loss:{},craft_mean_loss:{}===".format(log_DB_logits_loss/len(aug_images),
-                                                                     log_CRAFT_logits_loss/len(aug_images)))
-                # 更新epoch loss
-                log_epoch_DB_loss+=log_DB_logits_loss
-                log_epoch_CRAFT_loss += log_CRAFT_logits_loss
-
+                self.adv_patch = temp_patch
+                print("batch_loss==db_loss:{},craft_loss:{}===".format(log_batch_DB_loss,log_batch_CRAFT_loss))
 
             # epoch结束 更新self.adv_patch
-            self.adv_patch = adv_patch
+            # self.adv_patch = adv_patch
             # 打印epoch结果
             print("epoch:{}, db_loss:{},craft_loss".format(epoch, log_epoch_DB_loss,log_epoch_CRAFT_loss))
             # 保存epoch结果
@@ -300,3 +334,4 @@ if __name__ == '__main__':
                                 adv_patch_size=(1, 3, 100, 100),
                                 is_test=True)
     RAT.train()
+

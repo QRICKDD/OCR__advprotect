@@ -11,8 +11,6 @@ def get_random_resize_image(adv_image_lists, low=0.25, high=3.0):
     resize_adv_img_lists = []
     for img in adv_image_lists:
         resize_adv_img_lists.append(random_image_resize(img, low, high))
-    for img in adv_image_lists:
-        resize_adv_img_lists.append(random_image_resize(img, low, high))
     return resize_adv_img_lists
 def get_random_jpeg_image(adv_image_lists):
     jpeg_adv_img_lists = []
@@ -37,3 +35,5 @@ def get_augm_image(adv_images):
     offset_h_images = get_random_offset_h(adv_images)
     offset_w_images = get_random_offset_w(adv_images)
     return adv_images + resize_images + jpeg_images + offset_h_images + offset_w_images
+
+
