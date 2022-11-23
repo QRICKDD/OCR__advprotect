@@ -18,7 +18,6 @@ class DiffJPEG(nn.Module):
         #     quality(float): Quality factor for jpeg compression scheme.
         #
         super(DiffJPEG, self).__init__()
-        print(height,width)
         if differentiable:
             rounding = diff_round
         else:
@@ -66,6 +65,18 @@ def random_offset_h(image: torch.Tensor, scale_range=0.1):
     assert new_image.shape==image.shape
     return new_image
 
+def random_noise(image: torch.Tensor):
+    assert (len(image.shape) == 4 and image.shape[0] == 1)
+    device=image.device
+    temp_image=image.clone().detach().cpu().numpy()
+    noise=np.random.uniform(low=-0.05,high=0.05,size=temp_image.shape)
+    noise=torch.from_numpy(noise)
+    noise=noise.float()
+    noise=noise.to(device)
+
+    image=torch.clamp(image+noise,min=0,max=1)
+    return image
+
 def random_offset_w(image: torch.Tensor, scale_range=0.1):
     assert (len(image.shape) == 4 and image.shape[0] == 1)
     #assert image.requires_grad == True
@@ -76,7 +87,7 @@ def random_offset_w(image: torch.Tensor, scale_range=0.1):
     return new_image
 
 
-def random_jpeg(image:torch.Tensor):
+def random_jpeg(image:torch.Tensor,device):
     assert (len(image.shape) == 4 and image.shape[0] == 1)
     #assert image.requires_grad == True
     qs=[75,80,85,90]
@@ -84,9 +95,15 @@ def random_jpeg(image:torch.Tensor):
     h,w=image.shape[2:]
     h_resize=(h//112)*112
     w_resize = (w // 112) * 112
+    if w_resize==0:
+        w_resize=112
+    if h_resize==0:
+        h_resize=112
     image = transforms.Resize([h_resize, w_resize])(image)
-    jpeg = DiffJPEG(h_resize, w_resize, differentiable=True, quality=q).cuda()
+    jpeg = DiffJPEG(h_resize, w_resize, differentiable=True, quality=q)
+    jpeg=jpeg.to(device)
     image=jpeg(image)
+    del(jpeg)
     return image
 
 def normlize_MeanVariance(image:torch.Tensor,device):

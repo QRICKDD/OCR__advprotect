@@ -8,14 +8,14 @@ import numpy as np
 import pyclipper
 
 class Pytorch_model:
-    def __init__(self, model_path, gpu_id=None):
+    def __init__(self, model_path, device):
         '''
         初始化pytorch模型
         :param model_path: 模型地址(可以是模型的参数或者参数和计算图一起保存的文件)
         :param gpu_id: 在哪一块gpu上运行
         '''
         self.gpu_id = 0
-        self.device=torch.device("cuda:0")
+        self.device=device
         checkpoint = torch.load(model_path)
         print('device:', self.device)
 

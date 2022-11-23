@@ -6,6 +6,7 @@ CRAFT_model_path='../AllConfig/all_model/craft_ic15_20k.pth'
 
 #配置DBnet网络和数据存放的位置：
 DB_device=torch.device("cuda:0")
-CRAFT_device=torch.device("cuda:0")
+CRAFT_device=torch.device("cuda:1")
 test_device=torch.device("cuda:0")
+cpu_device=torch.device("cpu")
 #data.to(device)
