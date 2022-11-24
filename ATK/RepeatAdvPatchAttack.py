@@ -1,16 +1,19 @@
+import sys
+sys.path.append("..")
 import os
 import cv2
 import numpy as np
 import torch
 import torch.nn as nn
 import tqdm
-from model_DBnet.pred_single import *
 from model_CRAFT.pred_single import *
+from model_DBnet.pred_single import *
 from Tools.Imagebasetool import img_read, img_extract_background, img_tensortocv2
 from Tools.ImageProcess import *
 import random
 from ATK.ImageAugum import *
-
+from Mylog.logfun import logger_config
+import datetime
 
 class RepeatAdvPatch_Attack():
     def __init__(self,
@@ -47,6 +50,14 @@ class RepeatAdvPatch_Attack():
 
         # initiation
         self.adv_patch = torch.zeros(list(adv_patch_size))
+        self.start_epoch=0
+        # recover adv patch
+        recover_adv_path,epoch=self.recover_adv_patch()
+        if recover_adv_path!=None:
+            self.adv_patch=recover_adv_path
+            self.start_epoch=epoch
+
+
 
         # transform列表
         self.functions_name=[None,'get_random_resize_image_single',
@@ -55,6 +66,19 @@ class RepeatAdvPatch_Attack():
                              'get_random_noised_image',
                             'get_random_jpeg_image_single',
                             'get_random_offset_h_single','get_random_offset_w_single',]
+        self.logger=logger_config()
+
+    def recover_adv_patch(self):
+        temp_save_path = os.path.join(self.savedir, "advpatch")
+        if os.path.exists(temp_save_path):
+            files=os.listdir(temp_save_path)
+            if len(files)==0:
+                return None,None
+            files=sorted(files,key=lambda x:int(x.split('.')[0].split("_")[-1]))
+            epoch=int(files[-1].split('.')[0].split("_")[-1])
+            keyfile=os.path.join(temp_save_path,files[-1])
+            return img_read(keyfile),epoch
+        return None,None
 
     def get_image_backgroud_mask(self, image_list):
         mask_list = []
@@ -197,7 +221,7 @@ class RepeatAdvPatch_Attack():
         return fun_DB_loss,fun_CRAFT_loss,sum_grad
     def train(self):
         print("start training-====================")
-        for epoch in range(self.epoches):
+        for epoch in range(self.start_epoch+1,self.epoches):
             print("epoch: ", epoch)
             # 每个epoch都初始化动量
             momentum = 0
@@ -243,22 +267,27 @@ class RepeatAdvPatch_Attack():
                 temp_patch = self.adv_patch.clone().detach().cpu() + self.alpha * grad.sign()
                 temp_patch = torch.clamp(temp_patch, min=-self.eps, max=0)
                 self.adv_patch = temp_patch
-                print("batch_loss==db_loss:{},craft_loss:{}===".format(log_batch_DB_loss,log_batch_CRAFT_loss))
-
+                e="batch_loss==db_loss:{},craft_loss:{}===".format(log_batch_DB_loss,log_batch_CRAFT_loss)
+                self.logger.info(e + "------ " + str(datetime.time))
                 del(batchs_images)
                 del(hw_list)
                 del(masks_list)
             # epoch结束 更新self.adv_patch
             # self.adv_patch = adv_patch
             # 打印epoch结果
-            print("epoch:{}, db_loss:{},craft_loss:{}".format(epoch, log_epoch_DB_loss,log_epoch_CRAFT_loss))
+            e="epoch:{}, db_loss:{},craft_loss:{}".format(epoch, log_epoch_DB_loss,log_epoch_CRAFT_loss)
+            self.logger.info(e + "------ " + str(datetime.time))
+
+            #保存advpatch
+            temp_save_path = os.path.join(self.savedir, "advpatch")
+            if os.path.exists(temp_save_path) == False:
+                os.makedirs(temp_save_path)
+            self.save_adv_patch_img(self.adv_patch + 1, os.path.join(temp_save_path, "advpatch_{}.jpg".format(epoch)))
+
             # 保存epoch结果
             if epoch != 0 and epoch % 5 == 0:
                 self.evauate_test_path(epoch)
-                temp_save_path = os.path.join(self.savedir, "advpatch")
-                if os.path.exists(temp_save_path)==False:
-                    os.makedirs(temp_save_path)
-                self.save_adv_patch_img(self.adv_patch+1, os.path.join(temp_save_path, "advpatch_{}.jpg".format(epoch)))
+
 
     def evaluate_db_draw(self, adv_images, path, epoch,device):
         adv_images_cuda = self.list_to_cuda(adv_images,device)
@@ -360,7 +389,7 @@ class RepeatAdvPatch_Attack():
 
 
 if __name__ == '__main__':
-    RAT = RepeatAdvPatch_Attack(train_path=r'F:\OCR-TASK\Wsf\data\train', test_path=r'F:\OCR-TASK\Wsf\data\test',
+    RAT = RepeatAdvPatch_Attack(train_path=r'/share/home/yandiqun/djc/Wsf/data/train', test_path=r'/share/home/yandiqun/djc/Wsf/data/test',
                                 savedir='../result_save/120_120',
                                 eps=50/ 255, alpha=1 / 255, decay=0.05,
                                 epoches=101, batch_size=20,
