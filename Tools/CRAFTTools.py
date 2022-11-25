@@ -35,7 +35,8 @@ def get_CRAFT_pred(model,img:torch.Tensor,square_size=1280,
     img_resized, target_ratio =resize_aspect_ratio(image=img,device=device,
                                                    square_size=square_size,
                                                    mag_ratio=1.0)
-    img_norm=normlize_MeanVariance(img_resized,device)
+    #img_norm=normlize_MeanVariance(img_resized,device)
+    img_norm=img_resized
     if is_eval:
         with torch.no_grad():
             y,_=model(img_norm)

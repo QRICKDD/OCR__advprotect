@@ -17,7 +17,7 @@ import datetime
 
 class RepeatAdvPatch_Attack():
     def __init__(self,
-                 train_path, test_path, savedir,
+                 train_path, test_path, savedir,log_name,
                  eps=100 / 255, alpha=1 / 255, decay=1.0,
                  epoches=101, batch_size=8,
                  adv_patch_size=(1, 3, 100, 100),
@@ -60,16 +60,19 @@ class RepeatAdvPatch_Attack():
 
 
         # transform列表
-        self.functions_name=[None,'get_random_resize_image_single',
+        self.functions_name=[#None,
+                             'get_random_resize_image_single',
+                             'get_random_resize_image_single',
                              'get_random_resize_image_single',
                              'get_random_noised_image',
                              'get_random_noised_image',
-                            'get_random_jpeg_image_single',
-                            'get_random_offset_h_single','get_random_offset_w_single',]
-        self.logger=logger_config()
+                             'get_random_noised_image',
+                            'get_random_jpeg_image_single',]
+                            #'get_random_offset_h_single','get_random_offset_w_single',]
+        self.logger=logger_config(log_filename=log_name)
 
     def recover_adv_patch(self):
-        temp_save_path = os.path.join(self.savedir, "advpatch")
+        temp_save_path = os.path.join(self.savedir, "advtorch")
         if os.path.exists(temp_save_path):
             files=os.listdir(temp_save_path)
             if len(files)==0:
@@ -77,7 +80,7 @@ class RepeatAdvPatch_Attack():
             files=sorted(files,key=lambda x:int(x.split('.')[0].split("_")[-1]))
             epoch=int(files[-1].split('.')[0].split("_")[-1])
             keyfile=os.path.join(temp_save_path,files[-1])
-            return img_read(keyfile),epoch
+            return torch.load(keyfile),epoch
         return None,None
 
     def get_image_backgroud_mask(self, image_list):
@@ -268,7 +271,7 @@ class RepeatAdvPatch_Attack():
                 temp_patch = torch.clamp(temp_patch, min=-self.eps, max=0)
                 self.adv_patch = temp_patch
                 e="batch_loss==db_loss:{},craft_loss:{}===".format(log_batch_DB_loss,log_batch_CRAFT_loss)
-                self.logger.info(e + "------ " + str(datetime.time))
+                self.logger.info(e )
                 del(batchs_images)
                 del(hw_list)
                 del(masks_list)
@@ -276,13 +279,18 @@ class RepeatAdvPatch_Attack():
             # self.adv_patch = adv_patch
             # 打印epoch结果
             e="epoch:{}, db_loss:{},craft_loss:{}".format(epoch, log_epoch_DB_loss,log_epoch_CRAFT_loss)
-            self.logger.info(e + "------ " + str(datetime.time))
+            self.logger.info(e)
 
             #保存advpatch
             temp_save_path = os.path.join(self.savedir, "advpatch")
             if os.path.exists(temp_save_path) == False:
                 os.makedirs(temp_save_path)
             self.save_adv_patch_img(self.adv_patch + 1, os.path.join(temp_save_path, "advpatch_{}.jpg".format(epoch)))
+            temp_torch_save_path = os.path.join(self.savedir, "advtorch")
+            if os.path.exists(temp_torch_save_path) == False:
+                os.makedirs(temp_torch_save_path)
+            torch.save(self.adv_patch,os.path.join(temp_torch_save_path,"advpatch_{}.jpg".format(epoch)))
+
 
             # 保存epoch结果
             if epoch != 0 and epoch % 5 == 0:
@@ -389,11 +397,17 @@ class RepeatAdvPatch_Attack():
 
 
 if __name__ == '__main__':
-    RAT = RepeatAdvPatch_Attack(train_path=r'/share/home/yandiqun/djc/Wsf/data/train', test_path=r'/share/home/yandiqun/djc/Wsf/data/test',
-                                savedir='../result_save/120_120',
-                                eps=50/ 255, alpha=1 / 255, decay=0.05,
+    # RAT = RepeatAdvPatch_Attack(train_path=r'/share/home/yandiqun/djc/Wsf/data/train', test_path=r'/share/home/yandiqun/djc/Wsf/data/test',
+    #                             savedir='../result_save/120_120',
+    #                             eps=50/ 255, alpha=1 / 255, decay=0.05,
+    #                             epoches=101, batch_size=20,
+    #                             adv_patch_size=(1, 3, 120, 120),
+    #                             is_test=False)
+    RAT = RepeatAdvPatch_Attack(train_path=r'F:\OCR-TASK\Wsf\data\train', test_path=r'F:\OCR-TASK\Wsf\data\test',
+                                savedir='../result_save/150_150',log_name='150_150.log',
+                                eps=60/ 255, alpha=1 / 255, decay=1,
                                 epoches=101, batch_size=20,
-                                adv_patch_size=(1, 3, 120, 120),
+                                adv_patch_size=(1, 3, 150,150),
                                 is_test=False)
     RAT.train()
 
