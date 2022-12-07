@@ -1,0 +1,217 @@
+[2022-11-24 11:48:30,678]:INFO:batch_loss==db_loss:-1.3937043235637248,craft_loss:-2.4393854602240026===------ <class 'datetime.time'>
+[2022-11-24 11:49:27,358]:INFO:batch_loss==db_loss:-1.3516133348457515,craft_loss:-2.323722703731619===------ <class 'datetime.time'>
+[2022-11-24 11:50:33,100]:INFO:batch_loss==db_loss:-1.3425083891488612,craft_loss:-2.3602726785466075===------ <class 'datetime.time'>
+[2022-11-24 11:51:16,475]:INFO:batch_loss==db_loss:-1.368055997416377,craft_loss:-2.365836250828579===------ <class 'datetime.time'>
+[2022-11-24 11:52:03,237]:INFO:batch_loss==db_loss:-1.3142151103820652,craft_loss:-2.0926254227233585===------ <class 'datetime.time'>
+[2022-11-24 11:52:03,244]:INFO:epoch:1, db_loss:-6.77009715535678,craft_loss:-11.581842516054166------ <class 'datetime.time'>
+[2022-11-24 11:52:45,248]:INFO:batch_loss==db_loss:-1.3195579177699983,craft_loss:-2.0341384346829727===------ <class 'datetime.time'>
+[2022-11-24 11:53:43,667]:INFO:batch_loss==db_loss:-1.2935147057287395,craft_loss:-1.8126516800839454===------ <class 'datetime.time'>
+[2022-11-24 11:54:46,902]:INFO:batch_loss==db_loss:-1.2704233098775148,craft_loss:-1.9856554922298528===------ <class 'datetime.time'>
+[2022-11-24 11:55:48,500]:INFO:batch_loss==db_loss:-1.3772118443157524,craft_loss:-1.9712195845786482===------ <class 'datetime.time'>
+[2022-11-24 11:56:44,310]:INFO:batch_loss==db_loss:-1.3980013693217188,craft_loss:-1.8646884420159042===------ <class 'datetime.time'>
+[2022-11-24 11:56:44,316]:INFO:epoch:2, db_loss:-6.658709147013724,craft_loss:-9.668353633591323------ <class 'datetime.time'>
+[2022-11-24 11:57:34,296]:INFO:batch_loss==db_loss:-1.2740420456975698,craft_loss:-1.621636548987226===------ <class 'datetime.time'>
+[2022-11-24 11:58:25,762]:INFO:batch_loss==db_loss:-1.3253151460085064,craft_loss:-1.709196713789197===------ <class 'datetime.time'>
+[2022-11-24 11:59:25,476]:INFO:batch_loss==db_loss:-1.3562434478662908,craft_loss:-1.571072352846386===------ <class 'datetime.time'>
+[2022-11-24 12:00:29,006]:INFO:batch_loss==db_loss:-1.4581457597669214,craft_loss:-1.6483063511332148===------ <class 'datetime.time'>
+[2022-11-24 12:01:15,289]:INFO:batch_loss==db_loss:-1.2258626502007246,craft_loss:-1.2566816665930673===------ <class 'datetime.time'>
+[2022-11-24 12:01:15,295]:INFO:epoch:3, db_loss:-6.639609049540013,craft_loss:-7.806893633349091------ <class 'datetime.time'>
+[2022-11-24 12:02:17,138]:INFO:batch_loss==db_loss:-1.2545323548838496,craft_loss:-1.3812596161296824===------ <class 'datetime.time'>
+[2022-11-24 12:03:03,157]:INFO:batch_loss==db_loss:-1.2423471461515874,craft_loss:-1.2947924040527141===------ <class 'datetime.time'>
+[2022-11-24 12:04:01,695]:INFO:batch_loss==db_loss:-1.4291200451552868,craft_loss:-1.5628965925763973===------ <class 'datetime.time'>
+[2022-11-24 12:04:50,976]:INFO:batch_loss==db_loss:-1.3063040173146874,craft_loss:-1.1606338723177032===------ <class 'datetime.time'>
+[2022-11-24 12:05:51,507]:INFO:batch_loss==db_loss:-1.3533397978171706,craft_loss:-1.2100439556816127===------ <class 'datetime.time'>
+[2022-11-24 12:05:51,513]:INFO:epoch:4, db_loss:-6.585643361322582,craft_loss:-6.60962644075811------ <class 'datetime.time'>
+[2022-11-24 12:06:45,099]:INFO:batch_loss==db_loss:-1.347553750500083,craft_loss:-1.2684982189093716===------ <class 'datetime.time'>
+[2022-11-24 12:07:39,346]:INFO:batch_loss==db_loss:-1.4547565423417836,craft_loss:-1.3188398180909644===------ <class 'datetime.time'>
+[2022-11-24 12:08:21,505]:INFO:batch_loss==db_loss:-1.2006691319402307,craft_loss:-0.7587148930032015===------ <class 'datetime.time'>
+[2022-11-24 12:09:25,505]:INFO:batch_loss==db_loss:-1.3496078385505825,craft_loss:-1.1603285766759655===------ <class 'datetime.time'>
+[2022-11-24 12:10:24,934]:INFO:batch_loss==db_loss:-1.2200507828965783,craft_loss:-0.9245170137437526===------ <class 'datetime.time'>
+[2022-11-24 12:10:24,940]:INFO:epoch:5, db_loss:-6.572638046229258,craft_loss:-5.430898520423256------ <class 'datetime.time'>
+[2022-11-24 12:11:29,438]:INFO:batch_loss==db_loss:-1.3225800837390125,craft_loss:-1.075187175825704===------ <class 'datetime.time'>
+[2022-11-24 12:12:23,714]:INFO:batch_loss==db_loss:-1.2518064603209496,craft_loss:-0.9454139340814436===------ <class 'datetime.time'>
+[2022-11-24 12:13:22,326]:INFO:batch_loss==db_loss:-1.348611962981522,craft_loss:-0.9272446896038673===------ <class 'datetime.time'>
+[2022-11-24 12:14:18,915]:INFO:batch_loss==db_loss:-1.2927047146949917,craft_loss:-0.8439471109959413===------ <class 'datetime.time'>
+[2022-11-24 12:15:15,048]:INFO:batch_loss==db_loss:-1.3118922663852572,craft_loss:-0.9012919297674671===------ <class 'datetime.time'>
+[2022-11-24 12:15:15,056]:INFO:epoch:6, db_loss:-6.527595488121733,craft_loss:-4.693084840274423------ <class 'datetime.time'>
+[2022-11-24 12:16:13,593]:INFO:batch_loss==db_loss:-1.3826063161250204,craft_loss:-0.8899678298076737===------ <class 'datetime.time'>
+[2022-11-24 12:17:10,291]:INFO:batch_loss==db_loss:-1.2624317053705454,craft_loss:-0.7508782591673558===------ <class 'datetime.time'>
+[2022-11-24 12:18:02,597]:INFO:batch_loss==db_loss:-1.303803759161383,craft_loss:-0.7786457211176767===------ <class 'datetime.time'>
+[2022-11-24 12:18:57,124]:INFO:batch_loss==db_loss:-1.2463179719634354,craft_loss:-0.7121559581428301===------ <class 'datetime.time'>
+[2022-11-24 12:19:57,409]:INFO:batch_loss==db_loss:-1.284164804033935,craft_loss:-0.7708811153206826===------ <class 'datetime.time'>
+[2022-11-24 12:19:57,415]:INFO:epoch:7, db_loss:-6.479324556654319,craft_loss:-3.902528883556219------ <class 'datetime.time'>
+[2022-11-24 12:21:03,320]:INFO:batch_loss==db_loss:-1.2963014389388263,craft_loss:-0.8210031453163538===------ <class 'datetime.time'>
+[2022-11-24 12:21:52,372]:INFO:batch_loss==db_loss:-1.224581282469444,craft_loss:-0.5947584514407133===------ <class 'datetime.time'>
+[2022-11-24 12:22:48,757]:INFO:batch_loss==db_loss:-1.288157993578352,craft_loss:-0.7054270094744137===------ <class 'datetime.time'>
+[2022-11-24 14:18:49,834]:INFO:batch_loss==db_loss:-1.346233526011929,craft_loss:-1.6916923667313313===------ <class 'datetime.time'>
+[2022-11-24 14:19:39,361]:INFO:batch_loss==db_loss:-1.3024662011303008,craft_loss:-2.284984124969924===------ <class 'datetime.time'>
+[2022-11-24 14:20:37,038]:INFO:batch_loss==db_loss:-1.287297966890037,craft_loss:-2.213479600381106===------ <class 'datetime.time'>
+[2022-11-24 14:21:40,129]:INFO:batch_loss==db_loss:-1.4372053910046816,craft_loss:-2.591111516550882===------ <class 'datetime.time'>
+[2022-11-24 14:22:24,469]:INFO:batch_loss==db_loss:-1.4265629963483661,craft_loss:-2.2911236410727724===------ <class 'datetime.time'>
+[2022-11-24 14:22:24,473]:INFO:epoch:8, db_loss:-6.7997660813853145,craft_loss:-11.072391249706016------ <class 'datetime.time'>
+[2022-11-24 14:25:33,746]:INFO:batch_loss==db_loss:-1.3232048032805324,craft_loss:-1.1470404267456615===------ <class 'datetime.time'>
+[2022-11-24 14:26:30,400]:INFO:batch_loss==db_loss:-1.2390182169619948,craft_loss:-0.7971523491942207===------ <class 'datetime.time'>
+[2022-11-24 14:27:20,557]:INFO:batch_loss==db_loss:-1.297111694701016,craft_loss:-0.7178913216203001===------ <class 'datetime.time'>
+[2022-11-24 14:28:15,036]:INFO:batch_loss==db_loss:-1.3260758083779365,craft_loss:-0.9360555821701837===------ <class 'datetime.time'>
+[2022-11-24 14:29:03,819]:INFO:batch_loss==db_loss:-1.2522015010472387,craft_loss:-0.68454208509851===------ <class 'datetime.time'>
+[2022-11-24 14:29:03,826]:INFO:epoch:8, db_loss:-6.437612024368718,craft_loss:-4.282681764828876------ <class 'datetime.time'>
+[2022-11-24 14:30:02,791]:INFO:batch_loss==db_loss:-1.2225350517546758,craft_loss:-0.7718431090549316===------ <class 'datetime.time'>
+[2022-11-24 14:30:56,437]:INFO:batch_loss==db_loss:-1.2000374714843929,craft_loss:-0.7212154228682162===------ <class 'datetime.time'>
+[2022-11-24 14:31:46,936]:INFO:batch_loss==db_loss:-1.1248509112047032,craft_loss:-0.6155527488290442===------ <class 'datetime.time'>
+[2022-11-24 14:32:48,773]:INFO:batch_loss==db_loss:-1.3817667989060283,craft_loss:-0.7053141918040722===------ <class 'datetime.time'>
+[2022-11-24 14:33:41,342]:INFO:batch_loss==db_loss:-1.357836143579334,craft_loss:-0.7039821043470056===------ <class 'datetime.time'>
+[2022-11-24 14:33:41,349]:INFO:epoch:9, db_loss:-6.287026376929134,craft_loss:-3.5179075769032697------ <class 'datetime.time'>
+[2022-11-24 14:34:42,357]:INFO:batch_loss==db_loss:-1.0531236534006894,craft_loss:-0.5670309224054342===------ <class 'datetime.time'>
+[2022-11-24 14:35:30,312]:INFO:batch_loss==db_loss:-1.2446850209962577,craft_loss:-0.672760031878548===------ <class 'datetime.time'>
+[2022-11-24 14:36:23,009]:INFO:batch_loss==db_loss:-1.1400179425254464,craft_loss:-0.6448409919023007===------ <class 'datetime.time'>
+[2022-11-24 14:37:19,771]:INFO:batch_loss==db_loss:-1.0765536630060524,craft_loss:-0.5501633535968722===------ <class 'datetime.time'>
+[2022-11-24 14:38:14,994]:INFO:batch_loss==db_loss:-1.2703158521326259,craft_loss:-0.6917815925182822===------ <class 'datetime.time'>
+[2022-11-24 14:38:15,000]:INFO:epoch:10, db_loss:-5.784696132061072,craft_loss:-3.126576892301437------ <class 'datetime.time'>
+[2022-11-24 14:39:25,353]:INFO:batch_loss==db_loss:-0.9876393576851115,craft_loss:-0.5946710424832418===------ <class 'datetime.time'>
+[2022-11-24 14:40:23,548]:INFO:batch_loss==db_loss:-1.0439428725512698,craft_loss:-0.6697620411611431===------ <class 'datetime.time'>
+[2022-11-24 14:41:17,287]:INFO:batch_loss==db_loss:-0.7913208397803828,craft_loss:-0.44819173401778906===------ <class 'datetime.time'>
+[2022-11-24 14:42:15,267]:INFO:batch_loss==db_loss:-1.08415508933831,craft_loss:-0.6878623082986963===------ <class 'datetime.time'>
+[2022-11-24 14:43:12,553]:INFO:batch_loss==db_loss:-0.9662685614312068,craft_loss:-0.5542986910390394===------ <class 'datetime.time'>
+[2022-11-24 14:43:12,558]:INFO:epoch:11, db_loss:-4.873326720786281,craft_loss:-2.9547858169999097------ <class 'datetime.time'>
+[2022-11-24 14:44:10,640]:INFO:batch_loss==db_loss:-0.8329417892964557,craft_loss:-0.5340361949084367===------ <class 'datetime.time'>
+[2022-11-24 14:45:04,091]:INFO:batch_loss==db_loss:-0.7873239719774574,craft_loss:-0.4923330759779864===------ <class 'datetime.time'>
+[2022-11-24 14:46:09,458]:INFO:batch_loss==db_loss:-0.772440878325142,craft_loss:-0.6124686998064135===------ <class 'datetime.time'>
+[2022-11-24 14:47:03,959]:INFO:batch_loss==db_loss:-0.8239413790870458,craft_loss:-0.6348250956971242===------ <class 'datetime.time'>
+[2022-11-24 14:48:10,539]:INFO:batch_loss==db_loss:-0.7711270212894306,craft_loss:-0.6682807364140899===------ <class 'datetime.time'>
+[2022-11-24 14:48:10,545]:INFO:epoch:12, db_loss:-3.9877750399755314,craft_loss:-2.941943802804051------ <class 'datetime.time'>
+[2022-11-24 14:49:16,336]:INFO:batch_loss==db_loss:-0.7698445584392175,craft_loss:-0.6337823063238194===------ <class 'datetime.time'>
+[2022-11-24 14:50:10,668]:INFO:batch_loss==db_loss:-0.7190142254112288,craft_loss:-0.6673837517641672===------ <class 'datetime.time'>
+[2022-11-24 14:51:11,847]:INFO:batch_loss==db_loss:-0.7112411629641429,craft_loss:-0.506514916311396===------ <class 'datetime.time'>
+[2022-11-24 14:52:01,289]:INFO:batch_loss==db_loss:-0.5770636551314965,craft_loss:-0.4676167833920314===------ <class 'datetime.time'>
+[2022-11-24 14:52:57,115]:INFO:batch_loss==db_loss:-0.7016533145215362,craft_loss:-0.5726051389437998===------ <class 'datetime.time'>
+[2022-11-24 14:52:57,121]:INFO:epoch:13, db_loss:-3.478816916467622,craft_loss:-2.847902896735214------ <class 'datetime.time'>
+[2022-11-24 14:53:53,902]:INFO:batch_loss==db_loss:-0.6017877580597997,craft_loss:-0.4822070876146833===------ <class 'datetime.time'>
+[2022-11-24 14:54:39,055]:INFO:batch_loss==db_loss:-0.6926177683053538,craft_loss:-0.5626222808078135===------ <class 'datetime.time'>
+[2022-11-24 14:55:46,876]:INFO:batch_loss==db_loss:-0.5286534532206133,craft_loss:-0.5569018908712096===------ <class 'datetime.time'>
+[2022-11-24 14:56:39,052]:INFO:batch_loss==db_loss:-0.5909484212752432,craft_loss:-0.4651076674371755===------ <class 'datetime.time'>
+[2022-11-24 14:57:29,751]:INFO:batch_loss==db_loss:-0.7025643427623436,craft_loss:-0.587778901445448===------ <class 'datetime.time'>
+[2022-11-24 14:57:29,756]:INFO:epoch:14, db_loss:-3.1165717436233535,craft_loss:-2.65461782817633------ <class 'datetime.time'>
+[2022-11-24 14:58:23,135]:INFO:batch_loss==db_loss:-0.490425415802747,craft_loss:-0.4105799850112818===------ <class 'datetime.time'>
+[2022-11-24 14:59:25,384]:INFO:batch_loss==db_loss:-0.647140946588479,craft_loss:-0.6264375957140171===------ <class 'datetime.time'>
+[2022-11-24 15:00:16,497]:INFO:batch_loss==db_loss:-0.6156118703074753,craft_loss:-0.5504413523739771===------ <class 'datetime.time'>
+[2022-11-24 15:01:04,155]:INFO:batch_loss==db_loss:-0.6108224882045761,craft_loss:-0.564587697476787===------ <class 'datetime.time'>
+[2022-11-24 15:01:59,772]:INFO:batch_loss==db_loss:-0.542852365411818,craft_loss:-0.4498015476447108===------ <class 'datetime.time'>
+[2022-11-24 15:01:59,779]:INFO:epoch:15, db_loss:-2.9068530863150954,craft_loss:-2.601848178220774------ <class 'datetime.time'>
+[2022-11-24 15:08:04,412]:INFO:batch_loss==db_loss:-0.6339129061670974,craft_loss:-0.798657368453644===------ <class 'datetime.time'>
+[2022-11-24 15:08:56,472]:INFO:batch_loss==db_loss:-0.5603478292468935,craft_loss:-0.49635945236684===------ <class 'datetime.time'>
+[2022-11-24 15:09:53,053]:INFO:batch_loss==db_loss:-0.5743226114427671,craft_loss:-0.6631336845307014===------ <class 'datetime.time'>
+[2022-11-24 15:10:48,054]:INFO:batch_loss==db_loss:-0.619787730043754,craft_loss:-0.5863957369352182===------ <class 'datetime.time'>
+[2022-11-24 15:11:36,697]:INFO:batch_loss==db_loss:-0.5841742302291095,craft_loss:-0.5689532437872433===------ <class 'datetime.time'>
+[2022-11-24 15:11:36,702]:INFO:epoch:16, db_loss:-2.9725453071296215,craft_loss:-3.113499486073647------ <class 'datetime.time'>
+[2022-11-24 15:12:43,651]:INFO:batch_loss==db_loss:-0.6134313703514636,craft_loss:-0.6443836086152206===------ <class 'datetime.time'>
+[2022-11-24 15:13:48,277]:INFO:batch_loss==db_loss:-0.5165147089865059,craft_loss:-0.6028980410561238===------ <class 'datetime.time'>
+[2022-11-24 15:14:44,541]:INFO:batch_loss==db_loss:-0.5727270026691258,craft_loss:-0.49134645295531953===------ <class 'datetime.time'>
+[2022-11-24 15:15:47,172]:INFO:batch_loss==db_loss:-0.5107603376964107,craft_loss:-0.5509130812843068===------ <class 'datetime.time'>
+[2022-11-24 15:16:40,653]:INFO:batch_loss==db_loss:-0.5573037355206907,craft_loss:-0.547621909444137===------ <class 'datetime.time'>
+[2022-11-24 15:16:40,659]:INFO:epoch:17, db_loss:-2.7707371552241966,craft_loss:-2.837163093355108------ <class 'datetime.time'>
+[2022-11-24 15:17:40,107]:INFO:batch_loss==db_loss:-0.5748466762015596,craft_loss:-0.6294273688026659===------ <class 'datetime.time'>
+[2022-11-24 15:18:37,981]:INFO:batch_loss==db_loss:-0.5360124262515455,craft_loss:-0.5028589221374204===------ <class 'datetime.time'>
+[2022-11-24 15:19:34,728]:INFO:batch_loss==db_loss:-0.5484635062748566,craft_loss:-0.5076703052417555===------ <class 'datetime.time'>
+[2022-11-24 15:54:54,504]:INFO:batch_loss==db_loss:-0.5409671766683459,craft_loss:-0.6058423320237757===------ <class 'datetime.time'>
+[2022-11-24 15:55:42,482]:INFO:batch_loss==db_loss:-0.5887385258683935,craft_loss:-0.5281866313124345===------ <class 'datetime.time'>
+[2022-11-24 15:56:36,409]:INFO:batch_loss==db_loss:-0.6074180357391015,craft_loss:-0.7115220345165538===------ <class 'datetime.time'>
+[2022-11-24 15:57:29,324]:INFO:batch_loss==db_loss:-0.4721848206827417,craft_loss:-0.5505363683023015===------ <class 'datetime.time'>
+[2022-11-24 15:58:28,541]:INFO:batch_loss==db_loss:-0.5159201201749966,craft_loss:-0.5093344861095535===------ <class 'datetime.time'>
+[2022-11-24 15:58:28,548]:INFO:epoch:18, db_loss:-2.725228679133579,craft_loss:-2.905421852264619------ <class 'datetime.time'>
+[2022-11-24 15:59:21,641]:INFO:batch_loss==db_loss:-0.42978682823013514,craft_loss:-0.5231631960185379===------ <class 'datetime.time'>
+[2022-11-24 16:00:13,903]:INFO:batch_loss==db_loss:-0.48437385400757194,craft_loss:-0.5754063525340125===------ <class 'datetime.time'>
+[2022-11-24 16:01:09,803]:INFO:batch_loss==db_loss:-0.5775207683909684,craft_loss:-0.46446754196307005===------ <class 'datetime.time'>
+[2022-11-24 16:01:55,890]:INFO:batch_loss==db_loss:-0.48492751515004784,craft_loss:-0.46833196800226745===------ <class 'datetime.time'>
+[2022-11-24 16:03:04,909]:INFO:batch_loss==db_loss:-0.5196962392656133,craft_loss:-0.7826446449957069===------ <class 'datetime.time'>
+[2022-11-24 16:03:04,916]:INFO:epoch:19, db_loss:-2.4963052050443366,craft_loss:-2.8140137035135946------ <class 'datetime.time'>
+[2022-11-24 16:04:01,762]:INFO:batch_loss==db_loss:-0.5685211638920009,craft_loss:-0.5765934845599217===------ <class 'datetime.time'>
+[2022-11-24 16:04:52,498]:INFO:batch_loss==db_loss:-0.4545288315275684,craft_loss:-0.4589821056681172===------ <class 'datetime.time'>
+[2022-11-24 16:05:52,782]:INFO:batch_loss==db_loss:-0.4826125198742375,craft_loss:-0.5022221761725438===------ <class 'datetime.time'>
+[2022-11-24 16:06:46,854]:INFO:batch_loss==db_loss:-0.3587999161100015,craft_loss:-0.35378292845825854===------ <class 'datetime.time'>
+[2022-11-24 16:07:48,023]:INFO:batch_loss==db_loss:-0.5626694109523669,craft_loss:-0.6952621693408236===------ <class 'datetime.time'>
+[2022-11-24 16:07:48,029]:INFO:epoch:20, db_loss:-2.427131842356175,craft_loss:-2.5868428641996646------ <class 'datetime.time'>
+[2022-11-24 16:08:53,283]:INFO:batch_loss==db_loss:-0.5046663276152685,craft_loss:-0.56924659814184===------ <class 'datetime.time'>
+[2022-11-24 16:09:42,367]:INFO:batch_loss==db_loss:-0.4303198200650513,craft_loss:-0.4903591674788931===------ <class 'datetime.time'>
+[2022-11-24 16:12:01,620]:INFO:batch_loss==db_loss:-0.6491214411798865,craft_loss:-0.8204301616810517===------ <class 'datetime.time'>
+[2022-11-24 16:13:01,641]:INFO:batch_loss==db_loss:-0.43601106863934547,craft_loss:-0.6240369811239085===------ <class 'datetime.time'>
+[2022-11-24 16:13:52,485]:INFO:batch_loss==db_loss:-0.5014932694612071,craft_loss:-0.4705868523676623===------ <class 'datetime.time'>
+[2022-11-24 16:14:52,583]:INFO:batch_loss==db_loss:-0.45739197288639843,craft_loss:-0.522741967277625===------ <class 'datetime.time'>
+[2022-11-24 16:15:51,892]:INFO:batch_loss==db_loss:-0.44391615770291537,craft_loss:-0.5221080085329421===------ <class 'datetime.time'>
+[2022-11-24 16:15:51,899]:INFO:epoch:21, db_loss:-2.487933909869753,craft_loss:-2.9599039709831896------ <class 'datetime.time'>
+[2022-11-24 16:16:49,513]:INFO:batch_loss==db_loss:-0.5088477011304349,craft_loss:-0.6220161255307133===------ <class 'datetime.time'>
+[2022-11-24 16:17:46,730]:INFO:batch_loss==db_loss:-0.43998844421003014,craft_loss:-0.53842956955954===------ <class 'datetime.time'>
+[2022-11-24 16:18:33,268]:INFO:batch_loss==db_loss:-0.5184416135307401,craft_loss:-0.5289831048561626===------ <class 'datetime.time'>
+[2022-11-24 16:19:41,221]:INFO:batch_loss==db_loss:-0.4579867738066241,craft_loss:-0.5516176154338189===------ <class 'datetime.time'>
+[2022-11-24 16:22:11,400]:INFO:batch_loss==db_loss:-0.4458515391452238,craft_loss:-0.5255216821053778===------ <class 'datetime.time'>
+[2022-11-24 16:23:02,467]:INFO:batch_loss==db_loss:-0.6164611901622266,craft_loss:-0.6011052900776599===------ <class 'datetime.time'>
+[2022-11-24 16:23:56,873]:INFO:batch_loss==db_loss:-0.47071241738740355,craft_loss:-0.5907338935045199===------ <class 'datetime.time'>
+[2022-11-24 16:24:47,158]:INFO:batch_loss==db_loss:-0.46772272628732026,craft_loss:-0.5640879966449148===------ <class 'datetime.time'>
+[2022-11-24 16:25:54,567]:INFO:batch_loss==db_loss:-0.4306382474023849,craft_loss:-0.5967948966119168===------ <class 'datetime.time'>
+[2022-11-24 16:25:54,574]:INFO:epoch:22, db_loss:-2.431386120384559,craft_loss:-2.878243758944389------ <class 'datetime.time'>
+[2022-11-24 16:26:54,460]:INFO:batch_loss==db_loss:-0.4312213532393798,craft_loss:-0.5012594598971989===------ <class 'datetime.time'>
+[2022-11-24 16:27:43,437]:INFO:batch_loss==db_loss:-0.5111212754854932,craft_loss:-0.6474441779330615===------ <class 'datetime.time'>
+[2022-11-24 16:30:52,714]:INFO:batch_loss==db_loss:-0.5943279922274607,craft_loss:-0.7810927056676765===------ <class 'datetime.time'>
+[2022-11-24 16:31:52,173]:INFO:batch_loss==db_loss:-0.5465304087847471,craft_loss:-0.8616400990747305===------ <class 'datetime.time'>
+[2022-11-24 16:32:43,557]:INFO:batch_loss==db_loss:-0.4649007715550917,craft_loss:-0.6587761438403159===------ <class 'datetime.time'>
+[2022-11-24 16:33:37,858]:INFO:batch_loss==db_loss:-0.5168665844414916,craft_loss:-0.7551794051386569===------ <class 'datetime.time'>
+[2022-11-24 16:34:25,984]:INFO:batch_loss==db_loss:-0.5282974465351019,craft_loss:-0.6236609672516602===------ <class 'datetime.time'>
+[2022-11-24 16:34:25,990]:INFO:epoch:23, db_loss:-2.650923203543893,craft_loss:-3.68034932097304------ <class 'datetime.time'>
+[2022-11-24 16:35:10,879]:INFO:batch_loss==db_loss:-0.4572586079261132,craft_loss:-0.6487411635257744===------ <class 'datetime.time'>
+[2022-11-24 16:36:20,372]:INFO:batch_loss==db_loss:-0.4603061492421797,craft_loss:-0.7208706311173438===------ <class 'datetime.time'>
+[2022-11-24 16:37:09,399]:INFO:batch_loss==db_loss:-0.5061063781114561,craft_loss:-0.6626588798749362===------ <class 'datetime.time'>
+[2022-11-24 16:39:27,441]:INFO:batch_loss==db_loss:-0.6312599837159116,craft_loss:-0.8828484504376664===------ <class 'datetime.time'>
+[2022-11-24 16:40:20,434]:INFO:batch_loss==db_loss:-0.5182447195984423,craft_loss:-0.7132261544764169===------ <class 'datetime.time'>
+[2022-11-24 16:41:06,621]:INFO:batch_loss==db_loss:-0.5481976756515602,craft_loss:-0.7233099974951871===------ <class 'datetime.time'>
+[2022-11-24 16:41:58,009]:INFO:batch_loss==db_loss:-0.4264496971542636,craft_loss:-0.7342550349746008===------ <class 'datetime.time'>
+[2022-11-24 16:42:50,602]:INFO:batch_loss==db_loss:-0.5258641322143376,craft_loss:-0.9693276071578787===------ <class 'datetime.time'>
+[2022-11-24 16:42:50,608]:INFO:epoch:24, db_loss:-2.6500162083345153,craft_loss:-4.02296724454175------ <class 'datetime.time'>
+[2022-11-24 16:43:44,056]:INFO:batch_loss==db_loss:-0.4520713401337464,craft_loss:-0.7473443385142513===------ <class 'datetime.time'>
+[2022-11-24 16:44:31,472]:INFO:batch_loss==db_loss:-0.475671565781037,craft_loss:-0.6649425851061493===------ <class 'datetime.time'>
+[2022-11-24 16:45:25,229]:INFO:batch_loss==db_loss:-0.43712488173817593,craft_loss:-0.7560396597654956===------ <class 'datetime.time'>
+[2022-11-24 16:46:17,124]:INFO:batch_loss==db_loss:-0.4923769234058757,craft_loss:-0.5532949020505836===------ <class 'datetime.time'>
+[2022-11-24 16:47:04,911]:INFO:batch_loss==db_loss:-0.5461538267942766,craft_loss:-0.7942827632027915===------ <class 'datetime.time'>
+[2022-11-24 16:47:04,916]:INFO:epoch:25, db_loss:-2.4033985378531115,craft_loss:-3.5159042486392713------ <class 'datetime.time'>
+[2022-11-24 16:48:07,418]:INFO:batch_loss==db_loss:-0.4977334961295128,craft_loss:-0.6252180845914435===------ <class 'datetime.time'>
+[2022-11-24 16:48:53,805]:INFO:batch_loss==db_loss:-0.5640580261436602,craft_loss:-0.7791964530581942===------ <class 'datetime.time'>
+[2022-11-24 16:49:48,858]:INFO:batch_loss==db_loss:-0.3539717329355578,craft_loss:-0.6183171656594452===------ <class 'datetime.time'>
+[2022-11-24 16:50:37,035]:INFO:batch_loss==db_loss:-0.3700763913802802,craft_loss:-0.5505524769591409===------ <class 'datetime.time'>
+[2022-11-24 16:51:24,792]:INFO:batch_loss==db_loss:-0.4212592565454543,craft_loss:-0.6166036545458821===------ <class 'datetime.time'>
+[2022-11-24 16:51:24,798]:INFO:epoch:26, db_loss:-2.2070989031344657,craft_loss:-3.1898878348141055------ <class 'datetime.time'>
+[2022-11-24 16:52:16,676]:INFO:batch_loss==db_loss:-0.37153994260976714,craft_loss:-0.5207961239683548===------ <class 'datetime.time'>
+[2022-11-24 16:52:56,216]:INFO:batch_loss==db_loss:-0.5834322931865851,craft_loss:-0.5858343923656746===------ <class 'datetime.time'>
+[2022-11-24 16:53:49,388]:INFO:batch_loss==db_loss:-0.39865022959808516,craft_loss:-0.4942535161568231===------ <class 'datetime.time'>
+[2022-11-24 16:54:42,135]:INFO:batch_loss==db_loss:-0.4002998786357542,craft_loss:-0.5454693027726535===------ <class 'datetime.time'>
+[2022-11-24 16:55:24,845]:INFO:batch_loss==db_loss:-0.3726757077189783,craft_loss:-0.46927927379436946===------ <class 'datetime.time'>
+[2022-11-24 16:55:24,852]:INFO:epoch:27, db_loss:-2.12659805174917,craft_loss:-2.6156326090578754------ <class 'datetime.time'>
+[2022-11-24 17:00:57,563]:INFO:batch_loss==db_loss:-0.4799062254217763,craft_loss:-0.8083777503928651===------ <class 'datetime.time'>
+[2022-11-24 17:01:50,442]:INFO:batch_loss==db_loss:-0.4098998002397517,craft_loss:-0.6587847385801773===------ <class 'datetime.time'>
+[2022-11-24 17:02:40,738]:INFO:batch_loss==db_loss:-0.42766928393393755,craft_loss:-0.5761528781292719===------ <class 'datetime.time'>
+[2022-11-24 17:03:32,419]:INFO:batch_loss==db_loss:-0.46105454117059697,craft_loss:-0.6567238128117125===------ <class 'datetime.time'>
+[2022-11-24 17:04:20,364]:INFO:batch_loss==db_loss:-0.399787288159132,craft_loss:-0.5040603470602721===------ <class 'datetime.time'>
+[2022-11-24 17:04:20,370]:INFO:epoch:28, db_loss:-2.1783171389251947,craft_loss:-3.2040995269742987------ <class 'datetime.time'>
+[2022-11-24 17:05:05,147]:INFO:batch_loss==db_loss:-0.3807125928190848,craft_loss:-0.4747672962243846===------ <class 'datetime.time'>
+[2022-11-24 17:05:55,885]:INFO:batch_loss==db_loss:-0.36152133950963616,craft_loss:-0.5862202193171178===------ <class 'datetime.time'>
+[2022-11-24 17:06:58,346]:INFO:batch_loss==db_loss:-0.422040035482496,craft_loss:-0.741786668162585===------ <class 'datetime.time'>
+[2022-11-24 17:07:44,462]:INFO:batch_loss==db_loss:-0.3664267482236029,craft_loss:-0.45795333546151634===------ <class 'datetime.time'>
+[2022-11-24 17:08:39,917]:INFO:batch_loss==db_loss:-0.4695637171777586,craft_loss:-0.5033643633999358===------ <class 'datetime.time'>
+[2022-11-24 17:08:39,923]:INFO:epoch:29, db_loss:-2.0002644332125783,craft_loss:-2.7640918825655394------ <class 'datetime.time'>
+[2022-11-24 17:09:30,467]:INFO:batch_loss==db_loss:-0.32200649318595737,craft_loss:-0.5419957329294042===------ <class 'datetime.time'>
+[2022-11-24 17:10:15,775]:INFO:batch_loss==db_loss:-0.36601779547830426,craft_loss:-0.5130557387689144===------ <class 'datetime.time'>
+[2022-11-24 17:10:57,443]:INFO:batch_loss==db_loss:-0.3706619244379302,craft_loss:-0.5114095435745973===------ <class 'datetime.time'>
+[2022-11-24 17:11:47,924]:INFO:batch_loss==db_loss:-0.36389461702977616,craft_loss:-0.4261987281428345===------ <class 'datetime.time'>
+[2022-11-24 17:22:51,339]:INFO:batch_loss==db_loss:-0.4047681071485082,craft_loss:-0.6478543398225465===------ <class 'datetime.time'>
+[2022-11-24 17:23:44,274]:INFO:batch_loss==db_loss:-0.42554084351286287,craft_loss:-0.6503536026241934===------ <class 'datetime.time'>
+[2022-11-24 17:24:29,176]:INFO:batch_loss==db_loss:-0.4465628286513189,craft_loss:-0.5028569786959178===------ <class 'datetime.time'>
+[2022-11-24 17:25:20,088]:INFO:batch_loss==db_loss:-0.35307909439628316,craft_loss:-0.5692932546573574===------ <class 'datetime.time'>
+[2022-11-24 17:26:10,845]:INFO:batch_loss==db_loss:-0.38908691642185056,craft_loss:-0.6687942403019363===------ <class 'datetime.time'>
+[2022-11-24 17:26:10,851]:INFO:epoch:30, db_loss:-2.0190377901308234,craft_loss:-3.039152416101951------ <class 'datetime.time'>
+[2022-11-24 17:27:04,298]:INFO:batch_loss==db_loss:-0.47469176553810627,craft_loss:-0.6861997875044624===------ <class 'datetime.time'>
+[2022-11-24 17:27:49,737]:INFO:batch_loss==db_loss:-0.42721777424837154,craft_loss:-0.4899296074052232===------ <class 'datetime.time'>
+[2022-11-24 17:28:41,587]:INFO:batch_loss==db_loss:-0.39856461947783833,craft_loss:-0.5263018343589146===------ <class 'datetime.time'>
+[2022-11-24 17:29:38,378]:INFO:batch_loss==db_loss:-0.28902419408162433,craft_loss:-0.4258530206977032===------ <class 'datetime.time'>
+[2022-11-24 17:30:23,768]:INFO:batch_loss==db_loss:-0.3640224157522122,craft_loss:-0.4519328023805635===------ <class 'datetime.time'>
+[2022-11-24 17:30:23,774]:INFO:epoch:31, db_loss:-1.9535207690981526,craft_loss:-2.580217052346867------ <class 'datetime.time'>
+[2022-11-24 17:31:24,837]:INFO:batch_loss==db_loss:-0.3849682421423494,craft_loss:-0.5829782766982631===------ <class 'datetime.time'>
+[2022-11-24 17:32:18,862]:INFO:batch_loss==db_loss:-0.3774551302194596,craft_loss:-0.39530869735713814===------ <class 'datetime.time'>
+[2022-11-24 17:33:10,675]:INFO:batch_loss==db_loss:-0.34998089152698714,craft_loss:-0.4575138501634066===------ <class 'datetime.time'>
+[2022-11-24 17:33:55,818]:INFO:batch_loss==db_loss:-0.3334452214961251,craft_loss:-0.42326977360796575===------ <class 'datetime.time'>

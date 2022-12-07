@@ -1,0 +1,10 @@
+
+*.pyc
+*.pyc
+*.pyc
+AllConfig/all_model/craft_ic15_20k.pth
+model_EAST/weight/east_vgg16.pth
+model_textbox/weight/vgg16_reducedfc.pth
+*.jpg
+*.tp
+model_EAST/weight/vgg16_bn-6c64b313.pth751486afe18540ac7d5b8e19214c81d1
